@@ -1,0 +1,54 @@
+{
+  "_comment": "Etykiety do eval/audit.py (ręcznie, 27.09). epoch: staro | sred | nowo (XVI–XVIII) | xix (1795–1914) | 1914-39 (I wojna + międzywojnie) | iiws | 1945-89 | po1989. img: rodzaj obrazu (map = mapa/plan, cartoon = rysunek satyryczny/karykatura/ilustracja, poster = plakat/ulotka/okładka, photo = fotografia zabytku/przedmiotu, art = rycina/drzeworyt/obraz/portret, chart = wykres/tabela, artefact = znaczek/moneta/medal/banknot/herb, press = czasopismo/gazeta). chrono = zadanie na chronologię/datowanie. essay_topics: epoka tematu eseju (nr tematu → epoka). Brak zadań z epoki po 1989 w arkuszach 2024–2026.",
+  "essay_topics": {
+    "test2024_v2": {"1": "sred", "2": "nowo", "3": "1914-39"},
+    "test2025_v2": {"1": "sred", "2": "xix", "3": "1945-89"},
+    "test2026_v2": {"1": "sred", "2": "xix", "3": "iiws"}
+  },
+  "items": {
+    "test2024_v2": {
+      "1": {"epoch": "staro", "img": "photo"}, "2": {"epoch": "staro", "img": "map"},
+      "3.1": {"epoch": "staro"}, "3.2": {"epoch": "staro"}, "4": {"epoch": "staro", "img": "photo"},
+      "5.1": {"epoch": "sred", "img": "map"}, "5.2": {"epoch": "sred", "img": "map"}, "6": {"epoch": "sred", "img": "art"},
+      "7": {"epoch": "sred", "chrono": true}, "8.1": {"epoch": "nowo", "img": "art"}, "8.2": {"epoch": "nowo", "img": "art"},
+      "9": {"epoch": "nowo", "img": "art"}, "10": {"epoch": "nowo", "img": "chart"},
+      "11.1": {"epoch": "nowo", "img": "art"}, "11.2": {"epoch": "nowo", "img": "art"},
+      "12.1": {"epoch": "nowo", "img": "photo"}, "12.2": {"epoch": "nowo", "img": "photo"}, "12.3": {"epoch": "nowo", "img": "photo"},
+      "13": {"epoch": "nowo", "img": "art"}, "14.1": {"epoch": "xix", "img": "map"}, "14.2": {"epoch": "xix", "img": "map"},
+      "15.1": {"epoch": "xix"}, "15.2": {"epoch": "xix"}, "16.1": {"epoch": "xix", "img": "cartoon"}, "16.2": {"epoch": "xix", "img": "cartoon"},
+      "17.1": {"epoch": "xix", "img": "cartoon"}, "17.2": {"epoch": "xix", "img": "cartoon"}, "18": {"epoch": "1914-39", "img": "poster"},
+      "19.1": {"epoch": "1914-39", "img": "artefact"}, "19.2": {"epoch": "1914-39", "img": "artefact"},
+      "20.1": {"epoch": "1914-39"}, "20.2": {"epoch": "1914-39"}, "21": {"epoch": "1914-39", "img": "photo"},
+      "22.1": {"epoch": "iiws"}, "22.2": {"epoch": "iiws"}, "23.1": {"epoch": "1945-89", "img": "poster"}, "23.2": {"epoch": "1945-89", "img": "poster"},
+      "24": {"epoch": "1945-89", "img": "map"}, "25": {"epoch": "1945-89", "img": "cartoon"}
+    },
+    "test2025_v2": {
+      "1.1": {"epoch": "staro", "img": "photo"}, "1.2": {"epoch": "staro", "img": "photo"}, "2": {"epoch": "staro", "chrono": true},
+      "3.1": {"epoch": "staro", "img": "photo"}, "3.2": {"epoch": "staro", "img": "photo"}, "4": {"epoch": "sred"},
+      "5.1": {"epoch": "sred"}, "5.2": {"epoch": "sred"}, "6": {"epoch": "sred", "img": "map"},
+      "7.1": {"epoch": "sred", "img": "map"}, "7.2": {"epoch": "sred", "img": "map"}, "8": {"epoch": "sred", "img": "photo"},
+      "9.1": {"epoch": "nowo"}, "9.2": {"epoch": "nowo"}, "9.3": {"epoch": "nowo"}, "10": {"epoch": "nowo", "img": "artefact"},
+      "11.1": {"epoch": "nowo"}, "11.2": {"epoch": "nowo", "chrono": true}, "12": {"epoch": "xix", "img": "artefact"},
+      "13": {"epoch": "xix"}, "14.1": {"epoch": "xix", "img": "map"}, "14.2": {"epoch": "xix", "img": "map"},
+      "15.1": {"epoch": "xix"}, "15.2": {"epoch": "xix"}, "16.1": {"epoch": "xix", "img": "press"}, "16.2": {"epoch": "xix", "img": "press"},
+      "17.1": {"epoch": "1914-39", "img": "cartoon"}, "17.2": {"epoch": "1914-39", "img": "cartoon"}, "18": {"epoch": "1914-39", "img": "cartoon"},
+      "19": {"epoch": "1914-39"}, "20": {"epoch": "1914-39", "img": "poster"}, "21.1": {"epoch": "1914-39", "img": "press"},
+      "21.2": {"epoch": "1914-39", "img": "press"}, "22": {"epoch": "iiws"}, "23": {"epoch": "1945-89", "img": "art"},
+      "24.1": {"epoch": "1945-89"}, "24.2": {"epoch": "1945-89"}
+    },
+    "test2026_v2": {
+      "1": {"epoch": "staro", "img": "map"}, "2": {"epoch": "staro"}, "3.1": {"epoch": "staro", "img": "map"},
+      "3.2": {"epoch": "staro", "img": "map", "chrono": true}, "4.1": {"epoch": "sred", "img": "map"}, "4.2": {"epoch": "sred", "img": "map"},
+      "5.1": {"epoch": "sred"}, "5.2": {"epoch": "sred"}, "6.1": {"epoch": "sred"}, "6.2": {"epoch": "sred"},
+      "7": {"epoch": "sred", "img": "map"}, "8": {"epoch": "nowo"}, "9": {"epoch": "nowo"}, "10.1": {"epoch": "nowo"},
+      "10.2": {"epoch": "nowo"}, "11": {"epoch": "nowo"}, "12.1": {"epoch": "nowo", "img": "map"}, "12.2": {"epoch": "nowo", "img": "map"},
+      "13": {"epoch": "nowo", "img": "artefact"}, "14.1": {"epoch": "xix", "img": "artefact"}, "14.2": {"epoch": "xix", "img": "artefact"},
+      "14.3": {"epoch": "xix", "img": "artefact"}, "15.1": {"epoch": "xix", "img": "cartoon"}, "15.2": {"epoch": "xix", "img": "cartoon", "chrono": true},
+      "16.1": {"epoch": "xix", "img": "map"}, "16.2": {"epoch": "xix", "img": "map"}, "17": {"epoch": "xix"},
+      "18.1": {"epoch": "1914-39", "img": "artefact"}, "18.2": {"epoch": "1914-39", "img": "artefact"},
+      "19.1": {"epoch": "1914-39", "img": "press"}, "19.2": {"epoch": "1914-39", "img": "press"}, "20": {"epoch": "1914-39", "img": "cartoon", "chrono": true},
+      "21": {"epoch": "iiws"}, "22": {"epoch": "1945-89"}, "23.1": {"epoch": "1945-89", "img": "cartoon"}, "23.2": {"epoch": "1945-89", "img": "cartoon"},
+      "24": {"epoch": "1945-89", "img": "cartoon"}, "25": {"epoch": "1945-89", "img": "poster", "chrono": true}
+    }
+  }
+}

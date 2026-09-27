@@ -1,0 +1,81 @@
+# --- sekrety (nigdy do repo) ---
+.env
+.env.*
+*.env
+.fh_key
+*.key
+*.pem
+*_key
+*_key.txt
+*token*
+id_rsa*
+id_ed25519*
+.netrc
+.cache/
+.modal.toml
+.huggingface/
+
+# --- środowiska i cache ---
+.venv/
+venv*/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+
+# --- wagi modeli (pobierane z HF / trzymane na maszynach, patrz SOURCE.md) ---
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.onnx
+checkpoint-*/
+checkpoints/
+models/
+
+# --- dane: domyślnie wszystko poza repo ---
+/data/*
+eval/data/
+# wyjątki: baza wiedzy używana przez harness w czasie egzaminu (T2, T3) + statystyki
+!/data/kb/
+/data/kb/*
+!/data/kb/kompendium.jsonl
+!/data/kb/kb_all_notes.jsonl
+!/data/kb/KB_STATS.md
+# wyjątki: konfiguracja i szablon czatu LoRA T2 (same wagi LoRA są poza repo)
+!/data/final_artifacts/
+/data/final_artifacts/*
+!/data/final_artifacts/pllum-v1recipe-full-adapter/
+/data/final_artifacts/pllum-v1recipe-full-adapter/*
+!/data/final_artifacts/pllum-v1recipe-full-adapter/README.md
+!/data/final_artifacts/pllum-v1recipe-full-adapter/adapter_config.json
+!/data/final_artifacts/pllum-v1recipe-full-adapter/chat_template.jinja
+
+# --- materiały CKE / organizatorów (chronione, odtwarzalne skryptami) ---
+assets/cke/
+assets/mock-2023/
+assets/benchmark-2023/
+assets/presentations/
+assets/wmt_site/
+exams/
+
+# --- przycinanie słownika T3 (work/vt): obce dane i liczniki poza repo; skrypty i listy tokenów zostają ---
+work/vt/en/
+work/vt/qwen35/
+work/vt/held_runs/
+work/vt/held*.jsonl
+work/vt/*.npy
+work/vt/*.parquet
+
+# --- wyniki, logi, stan generatorów ---
+runs/
+results/
+overnight/logs/
+data_gen/logs/
+data_gen/state/
+data_gen/cost_log.jsonl
+*.log
+*.pid
+nohup.out

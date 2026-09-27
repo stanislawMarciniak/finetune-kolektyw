@@ -1,0 +1,651 @@
+{
+ "_comment": "Grupy do eval/audit.py. role: final | ref | near (składnik finału) | rejected. runs: zbiór -> przebiegi; 'przebieg|essay' = tylko esej z przebiegu, 'przebieg|noessay' = bez eseju (do złożenia finału z przebiegów scalonych; oceny innych zadań w przebiegach --essay-from są kopiowane przez judge_reuse i nie mogą wchodzić do porównań). vs = odniesienie dla sekcji G; vs_runs = jawne (sparowane) przebiegi odniesienia; before = poprzedni stan dla sekcji H.",
+ "groups": {
+  "T1-final": {
+   "track": "T1",
+   "role": "final",
+   "before": "T1-before",
+   "label": "T1 finał: Gemma-4-12B QAT + --rozstrz-hint + esej --essay-mode rubric --essay-rubric-fixed (krótkie: fx-t1rh 3 seedy; esej: ek22F, 5 seedów/arkusz)",
+   "runs": {
+    "test2024_v2": [
+     "fx-t1rh-s42|noessay",
+     "fx-t1rh-s43|noessay",
+     "fx-t1rh-s44|noessay",
+     "ek22F-s42|essay",
+     "ek22F-s43|essay",
+     "ek22F-s44|essay",
+     "ek22F-s45|essay",
+     "ek22F-s46|essay"
+    ],
+    "test2025_v2": [
+     "fx-t1rh-s42|noessay",
+     "fx-t1rh-s43|noessay",
+     "fx-t1rh-s44|noessay",
+     "ek22F-s42|essay",
+     "ek22F-s43|essay",
+     "ek22F-s44|essay",
+     "ek22F-s45|essay",
+     "ek22F-s46|essay"
+    ],
+    "test2026_v2": [
+     "fx-t1rh-s42|noessay",
+     "fx-t1rh-s43|noessay",
+     "fx-t1rh-s44|noessay",
+     "ek22F-s42|essay",
+     "ek22F-s43|essay",
+     "ek22F-s44|essay",
+     "ek22F-s45|essay",
+     "ek22F-s46|essay"
+    ]
+   }
+  },
+  "T1-before": {
+   "track": "T1",
+   "role": "ref",
+   "label": "T1 stan z audytu 07:00: t1final (3 seedy) + eseje bazowe tych samych 5 seedów co ek22",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42|noessay",
+     "gemma4-qat-t1final__s43|noessay",
+     "gemma4-qat__nt1final-s44|noessay",
+     "gemma4-qat-t1final__s42|essay",
+     "gemma4-qat-t1final__s43|essay",
+     "gemma4-qat__nt1final-s44|essay",
+     "ek22B-s45|essay",
+     "ek22B-s46|essay"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42|noessay",
+     "gemma4-qat-t1final__s43|noessay",
+     "gemma4-qat__nt1final-s44|noessay",
+     "gemma4-qat-t1final__s42|essay",
+     "gemma4-qat-t1final__s43|essay",
+     "gemma4-qat__nt1final-s44|essay",
+     "ek22B-s45|essay",
+     "ek22B-s46|essay"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42|noessay",
+     "fx-t1base-s43|noessay",
+     "gemma4-qat-t1final__s42|essay",
+     "ek22B-s43|essay",
+     "ek22B-s44|essay",
+     "ek22B-s45|essay",
+     "ek22B-s46|essay"
+    ]
+   }
+  },
+  "T1-rozstrz-hint": {
+   "track": "T1",
+   "role": "near",
+   "vs": "T1-t1final",
+   "label": "składnik finału: --rozstrz-hint (tylko zadania krótkie)",
+   "runs": {
+    "test2024_v2": [
+     "fx-t1rh-s42|noessay",
+     "fx-t1rh-s43|noessay",
+     "fx-t1rh-s44|noessay"
+    ],
+    "test2025_v2": [
+     "fx-t1rh-s42|noessay",
+     "fx-t1rh-s43|noessay",
+     "fx-t1rh-s44|noessay"
+    ],
+    "test2026_v2": [
+     "fx-t1rh-s42|noessay",
+     "fx-t1rh-s43|noessay",
+     "fx-t1rh-s44|noessay"
+    ]
+   }
+  },
+  "T1-t1final": {
+   "track": "T1",
+   "role": "ref",
+   "label": "t1final bez eseju",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42|noessay",
+     "gemma4-qat-t1final__s43|noessay",
+     "gemma4-qat__nt1final-s44|noessay"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42|noessay",
+     "gemma4-qat-t1final__s43|noessay",
+     "gemma4-qat__nt1final-s44|noessay"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42|noessay",
+     "fx-t1base-s43|noessay"
+    ]
+   }
+  },
+  "T1-essay-rubric": {
+   "track": "T1",
+   "role": "near",
+   "vs": "T1-essay-base",
+   "label": "składnik finału: esej rubric-fixed (ek22F), tylko esej",
+   "runs": {
+    "test2024_v2": [
+     "ek22F-s42|essay",
+     "ek22F-s43|essay",
+     "ek22F-s44|essay",
+     "ek22F-s45|essay",
+     "ek22F-s46|essay"
+    ],
+    "test2025_v2": [
+     "ek22F-s42|essay",
+     "ek22F-s43|essay",
+     "ek22F-s44|essay",
+     "ek22F-s45|essay",
+     "ek22F-s46|essay"
+    ],
+    "test2026_v2": [
+     "ek22F-s42|essay",
+     "ek22F-s43|essay",
+     "ek22F-s44|essay",
+     "ek22F-s45|essay",
+     "ek22F-s46|essay"
+    ]
+   }
+  },
+  "T1-essay-base": {
+   "track": "T1",
+   "role": "ref",
+   "label": "eseje bazowe (te same seedy i tematy)",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42|essay",
+     "gemma4-qat-t1final__s43|essay",
+     "gemma4-qat__nt1final-s44|essay",
+     "ek22B-s45|essay",
+     "ek22B-s46|essay"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42|essay",
+     "gemma4-qat-t1final__s43|essay",
+     "gemma4-qat__nt1final-s44|essay",
+     "ek22B-s45|essay",
+     "ek22B-s46|essay"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42|essay",
+     "ek22B-s43|essay",
+     "ek22B-s44|essay",
+     "ek22B-s45|essay",
+     "ek22B-s46|essay"
+    ]
+   }
+  },
+  "T1-essay-rubric-kb": {
+   "track": "T1",
+   "role": "rejected",
+   "vs": "T1-essay-base",
+   "label": "odrzucone: rubric-fixed + --essay-refine-kb v1 (ek22FK), tylko esej",
+   "runs": {
+    "test2024_v2": [
+     "ek22FK-s42|essay",
+     "ek22FK-s43|essay",
+     "ek22FK-s44|essay",
+     "ek22FK-s45|essay",
+     "ek22FK-s46|essay"
+    ],
+    "test2025_v2": [
+     "ek22FK-s42|essay",
+     "ek22FK-s43|essay",
+     "ek22FK-s44|essay",
+     "ek22FK-s45|essay",
+     "ek22FK-s46|essay"
+    ],
+    "test2026_v2": [
+     "ek22FK-s42|essay",
+     "ek22FK-s43|essay",
+     "ek22FK-s44|essay",
+     "ek22FK-s45|essay",
+     "ek22FK-s46|essay"
+    ]
+   }
+  },
+  "T1-img1120": {
+   "track": "T1",
+   "role": "rejected",
+   "vs": "T1-t1final-full",
+   "label": "T1 --image-min-tokens 1120 (2 seedy)",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat__nt1img1120-s42",
+     "gemma4-qat__nt1img1120-s43"
+    ],
+    "test2025_v2": [
+     "gemma4-qat__nt1img1120-s42",
+     "gemma4-qat__nt1img1120-s43"
+    ],
+    "test2026_v2": [
+     "gemma4-qat__nt1img1120-s42",
+     "gemma4-qat__nt1img1120-s43"
+    ]
+   }
+  },
+  "T1-essay-refine-kb": {
+   "track": "T1",
+   "role": "rejected",
+   "vs": "T1-t1final-full",
+   "label": "T1 --essay-refine-kb v1 (tylko esej)",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat__nt1ref-t1final__s42",
+     "gemma4-qat__nt1ref-t1final__s43"
+    ],
+    "test2025_v2": [
+     "gemma4-qat__nt1ref-t1final__s42",
+     "gemma4-qat__nt1ref-t1final__s43"
+    ],
+    "test2026_v2": [
+     "gemma4-qat__nt1ref-t1final__s42"
+    ]
+   },
+   "vs_runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42"
+    ]
+   }
+  },
+  "T1-essay-refine-kb3": {
+   "track": "T1",
+   "role": "rejected",
+   "vs": "T1-t1final-full",
+   "label": "T1 --essay-refine-kb v3 (tylko esej)",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat__nt1refkb3-t1final__s42",
+     "gemma4-qat__nt1refkb3-t1final__s43"
+    ],
+    "test2025_v2": [
+     "gemma4-qat__nt1refkb3-t1final__s42",
+     "gemma4-qat__nt1refkb3-t1final__s43"
+    ],
+    "test2026_v2": [
+     "gemma4-qat__nt1refkb3-t1final__s42"
+    ]
+   },
+   "vs_runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42"
+    ]
+   }
+  },
+  "T1-t1final-full": {
+   "track": "T1",
+   "role": "ref",
+   "label": "t1final pełne przebiegi (3 seedy)",
+   "runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43",
+     "gemma4-qat__nt1final-s44"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43",
+     "gemma4-qat__nt1final-s44"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42",
+     "fx-t1base-s43"
+    ]
+   }
+  },
+  "T1-tiles": {
+   "track": "T1",
+   "role": "rejected",
+   "vs": "T1-t1final-full",
+   "vs_runs": {
+    "test2024_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43"
+    ],
+    "test2025_v2": [
+     "gemma4-qat-t1final__s42",
+     "gemma4-qat-t1final__s43"
+    ],
+    "test2026_v2": [
+     "gemma4-qat-t1final__s42",
+     "fx-t1base-s43"
+    ]
+   },
+   "label": "odrzucone: --image-tiles (2 seedy, tylko zadania z obrazem)",
+   "runs": {
+    "test2024_v2": [
+     "img-t1tiles-s42",
+     "img-t1tiles-s43"
+    ],
+    "test2025_v2": [
+     "img-t1tiles-s42",
+     "img-t1tiles-s43"
+    ],
+    "test2026_v2": [
+     "img-t1tiles-s42",
+     "img-t1tiles-s43"
+    ]
+   }
+  },
+  "T2-final": {
+   "track": "T2",
+   "role": "final",
+   "label": "T2 finał: PLLuM+LoRA+RAG --fill-fields --ocr + caption 0.8B",
+   "runs": {
+    "test2024_v2": [
+     "img-t2ocrcap-a",
+     "img-t2ocrcap-b"
+    ],
+    "test2025_v2": [
+     "img-t2ocrcap-a",
+     "img-t2ocrcap-b"
+    ],
+    "test2026_v2": [
+     "img-t2ocrcap-a",
+     "img-t2ocrcap-b"
+    ]
+   },
+   "before": "T2-old"
+  },
+  "T2-fill-fields": {
+   "track": "T2",
+   "role": "ref",
+   "vs": "T2-final",
+   "label": "T2 poprzedni finał (--fill-fields, bez pomocy obrazowej)",
+   "runs": {
+    "test2024_v2": [
+     "img-t2base-a",
+     "img-t2base-b"
+    ],
+    "test2025_v2": [
+     "img-t2base-a",
+     "img-t2base-b"
+    ],
+    "test2026_v2": [
+     "img-t2base-a",
+     "img-t2base-b"
+    ]
+   }
+  },
+  "T2-ocr-only": {
+   "track": "T2",
+   "role": "rejected",
+   "vs": "T2-final",
+   "label": "T2 --fill-fields --ocr (bez caption)",
+   "runs": {
+    "test2024_v2": [
+     "img-t2ocr-a",
+     "img-t2ocr-b"
+    ],
+    "test2025_v2": [
+     "img-t2ocr-a",
+     "img-t2ocr-b"
+    ],
+    "test2026_v2": [
+     "img-t2ocr-a",
+     "img-t2ocr-b"
+    ]
+   }
+  },
+  "T2-caption-only": {
+   "track": "T2",
+   "role": "rejected",
+   "vs": "T2-final",
+   "label": "T2 --fill-fields + caption (bez OCR)",
+   "runs": {
+    "test2024_v2": [
+     "img-t2cap-a",
+     "img-t2cap-b"
+    ],
+    "test2025_v2": [
+     "img-t2cap-a",
+     "img-t2cap-b"
+    ],
+    "test2026_v2": [
+     "img-t2cap-a",
+     "img-t2cap-b"
+    ]
+   }
+  },
+  "T2-old": {
+   "track": "T2",
+   "role": "ref",
+   "label": "T2 finał z 01:00 (bez --fill-fields; 3 przebiegi tej samej konfiguracji)",
+   "runs": {
+    "test2024_v2": [
+     "pllum-v1recipe-full-polqa",
+     "pllum-kbab-v1",
+     "fx-t2base"
+    ],
+    "test2025_v2": [
+     "pllum-v1recipe-full-polqa",
+     "pllum-kbab-v1",
+     "fx-t2base"
+    ],
+    "test2026_v2": [
+     "pllum-v1recipe-full-polqa",
+     "pllum-kbab-v1",
+     "fx-t2base"
+    ]
+   }
+  },
+  "T2-nt2ocr": {
+   "track": "T2",
+   "role": "rejected",
+   "vs": "T2-old",
+   "label": "T2 --ocr, pełny przebieg (raport 10)",
+   "runs": {
+    "test2024_v2": [
+     "pllum-v1r__nt2ocr"
+    ],
+    "test2025_v2": [
+     "pllum-v1r__nt2ocr"
+    ]
+   }
+  },
+  "T2-hyde": {
+   "track": "T2",
+   "role": "rejected",
+   "vs": "T2-old",
+   "label": "T2 --rag hyde",
+   "runs": {
+    "test2024_v2": [
+     "pllum-v1r__nt2hyde"
+    ],
+    "test2025_v2": [
+     "pllum-v1r__nt2hyde"
+    ]
+   }
+  },
+  "T2-kbk2": {
+   "track": "T2",
+   "role": "rejected",
+   "vs": "T2-old",
+   "label": "T2 --kb-rag-k 2",
+   "runs": {
+    "test2024_v2": [
+     "pllum-v1r__nt2k2"
+    ],
+    "test2025_v2": [
+     "pllum-v1r__nt2k2"
+    ]
+   }
+  },
+  "T2-kbk3": {
+   "track": "T2",
+   "role": "rejected",
+   "vs": "T2-old",
+   "label": "T2 --kb-rag-k 3",
+   "runs": {
+    "test2024_v2": [
+     "pllum-v1r__nt2k3"
+    ],
+    "test2025_v2": [
+     "pllum-v1r__nt2k3"
+    ]
+   }
+  },
+  "T3-final": {
+   "track": "T3",
+   "role": "final",
+   "before": "T3-MIX",
+   "label": "T3 finał: Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-V124K 1.53 GB + esej structured (3 seedy; przebiegi bez --think-retry/--match-retry)",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-vt-mix-s4k-v124k__struct2-s42",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s43",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s44"
+    ],
+    "test2025_v2": [
+     "q35-4b-vt-mix-s4k-v124k__struct2-s42",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s43",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s44"
+    ],
+    "test2026_v2": [
+     "q35-4b-vt-mix-s4k-v124k__struct2-s42",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s43",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s44"
+    ]
+   }
+  },
+  "T3-MIX": {
+   "track": "T3",
+   "role": "ref",
+   "label": "T3 stan z audytu 07:00: IQ2_M-PL-E4K-MIX 1.75 GB",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s42",
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s43"
+    ],
+    "test2025_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s42",
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s43"
+    ],
+    "test2026_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s42",
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s43-2026-fh"
+    ]
+   }
+  },
+  "T3-retry": {
+   "track": "T3",
+   "role": "near",
+   "vs": "T3-MIX",
+   "vs_runs": {
+    "test2024_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s42",
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s43"
+    ],
+    "test2025_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s43"
+    ],
+    "test2026_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-s42"
+    ]
+   },
+   "label": "składnik finału: --think-retry --match-retry (na MIX, scalone, seedy sparowane)",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-rt-s42",
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-rt-s43"
+    ],
+    "test2025_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-rt-s43"
+    ],
+    "test2026_v2": [
+     "q35-4b-q2-iq2mpl-e4k-mix__struct2-rt-s42"
+    ]
+   }
+  },
+  "T3-T40K": {
+   "track": "T3",
+   "role": "rejected",
+   "vs": "T3-final",
+   "vs_runs": {
+    "test2024_v2": [
+     "q35-4b-vt-mix-s4k-v124k__struct2-s42",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s43"
+    ],
+    "test2025_v2": [
+     "q35-4b-vt-mix-s4k-v124k__struct2-s42",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s43"
+    ],
+    "test2026_v2": [
+     "q35-4b-vt-mix-s4k-v124k__struct2-s42",
+     "q35-4b-vt-mix-s4k-v124k__struct2-s43"
+    ]
+   },
+   "label": "odrzucone: słownik przycięty do 40k (1.40 GB), z retry",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-vt-mix-s4k-t40k__struct2-s42",
+     "q35-4b-vt-mix-s4k-t40k__struct2-s43"
+    ],
+    "test2025_v2": [
+     "q35-4b-vt-mix-s4k-t40k__struct2-s42",
+     "q35-4b-vt-mix-s4k-t40k__struct2-s43"
+    ],
+    "test2026_v2": [
+     "q35-4b-vt-mix-s4k-t40k__struct2-s42",
+     "q35-4b-vt-mix-s4k-t40k__struct2-s43"
+    ]
+   }
+  },
+  "T3-prev-iq3xxs": {
+   "track": "T3",
+   "role": "rejected",
+   "vs": "T3-MIX",
+   "label": "T3 poprzedni: UD-IQ3_XXS 1.95 GB + limit 5000 (esej stary)",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-iq3xxs__nt3rb-s42",
+     "q35-4b-iq3xxs__nt3rbE3-s43",
+     "q35-4b-cq-stock-iq3xxs__bf5k-s42"
+    ],
+    "test2025_v2": [
+     "q35-4b-iq3xxs__nt3rb-s42",
+     "q35-4b-iq3xxs__nt3rbE3-s43",
+     "q35-4b-cq-stock-iq3xxs__bf5k-s42"
+    ],
+    "test2026_v2": [
+     "q35-4b-iq3xxs__nt3rbE3-s43",
+     "q35-4b-iq3xxs__nt3rbE3fix-s42"
+    ]
+   }
+  },
+  "T3-e4k": {
+   "track": "T3",
+   "role": "rejected",
+   "vs": "T3-MIX",
+   "label": "T3 IQ3_XXS-PL-E4K 1.87 GB (esej stary)",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-cq-iq3xxs-pl-e4k__final-s42"
+    ],
+    "test2025_v2": [
+     "q35-4b-cq-iq3xxs-pl-e4k__final-s42"
+    ],
+    "test2026_v2": [
+     "q35-4b-cq-iq3xxs-pl-e4k__final-s42"
+    ]
+   }
+  }
+ }
+}

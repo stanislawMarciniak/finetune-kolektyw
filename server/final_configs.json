@@ -1,0 +1,44 @@
+{
+  "_comment": "Konfiguracje egzaminu (G4). server: argumenty llama-server (ścieżki względem $HOME na H100); harness: argumenty run_exam.py. Uzupełniane na G4 według raportu 09.",
+  "T1": {
+    "tuned": {
+      "server": "-m models/google/gemma-4-12B-it-qat-q4_0-gguf/gemma-4-12b-it-qat-q4_0.gguf --mmproj models/google/gemma-4-12B-it-qat-q4_0-gguf/mmproj-gemma-4-12b-it-qat-q4_0.gguf -ub 4096 -b 4096 -c 131072 -np 8 --reasoning-format deepseek",
+      "harness": "--parallel 8 --rag none --vision --think essay,rozstrz,open,podaj,closed --temperature 1.0 --top-p 0.95 --top-k 64 --rozstrz-hint --essay-mode rubric --essay-rubric-fixed"
+    },
+    "base": {
+      "server": "-m models/google/gemma-4-12B-it-qat-q4_0-gguf/gemma-4-12b-it-qat-q4_0.gguf --mmproj models/google/gemma-4-12B-it-qat-q4_0-gguf/mmproj-gemma-4-12b-it-qat-q4_0.gguf -ub 4096 -b 4096 -c 131072 -np 8 --reasoning-format deepseek",
+      "harness": "--bare --parallel 8 --vision --think essay,rozstrz,open,podaj,closed --temperature 1.0 --top-p 0.95 --top-k 64"
+    }
+  },
+  "T2": {
+    "tuned": {
+      "server": "-m models/mradermacher/PLLuM-12B-base-2512-GGUF/PLLuM-12B-base-2512.Q4_K_M.gguf --lora train/pllum-v1recipe-full/lora.gguf --chat-template-file train/pllum-12b-base/chat_template.jinja -c 65536 -np 8",
+      "harness": "--parallel 8 --no-think-kwargs --temperature 0.0 --top-p 1.0 --top-k 1 --kb-essay data/kb/kompendium.jsonl --rag bm25 --rag-types podaj,rozstrz,open --rag-k 3 --kb-rag data/kb/kb_all_notes.jsonl --kb-rag-k 1 --fill-fields --ocr",
+      "caption_server": "-m models/unsloth/Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf --mmproj models/unsloth/Qwen3.5-0.8B-GGUF/mmproj-F16.gguf -c 32768 -np 8"
+    },
+    "base": {
+      "server": "-m models/mradermacher/PLLuM-12B-base-2512-GGUF/PLLuM-12B-base-2512.Q4_K_M.gguf -c 65536 -np 8",
+      "harness": "--bare --parallel 8 --no-think-kwargs --temperature 0.0 --top-p 1.0 --top-k 1"
+    }
+  },
+  "T3": {
+    "tuned": {
+      "server": "-m models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek --reasoning-budget 5000",
+      "reasoning_budget_message": "\n\nNa podstawie powyższych rozważań podaję ostateczną odpowiedź.\n",
+      "harness": "--parallel 8 --rag none --vision --think rozstrz,open,podaj,closed --temperature 0.6 --top-p 0.95 --top-k 20 --max-tokens 8000 --kb-essay data/kb/kompendium.jsonl --essay-mode structured --think-retry --match-retry"
+    },
+    "base": {
+      "server": "-m models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek",
+      "harness": "--bare --parallel 8 --vision --temperature 1.0 --top-p 0.95 --top-k 20"
+    }
+  },
+  "_comment_T3_old3": "Do 27.09 08:00 (raport 21, decyzja użytkownika): T3 tuned harness bez \"--think-retry --match-retry\" (fallback od razu bez myślenia; dopasowania z cyframi bez powtórki). Powrót: usunąć obie flagi.",
+  "_comment_T3_mix_old": "Do 27.09 07:30 (raport 18, decyzja użytkownika): T3 tuned i base -m = models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX.gguf (1 745 906 784 B); reszta flag bez zmian. Powrót: podmienić ścieżkę -m.",
+  "_comment_T3_old2": "Do 27.09 05:35 (raport 10c): stock UD-IQ3_XXS 1.95 GB. {\"tuned\": {\"server\": \"-m models/unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-UD-IQ3_XXS.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek --reasoning-budget 5000\", \"reasoning_budget_message\": \"\\n\\nNa podstawie powyższych rozważań podaję ostateczną odpowiedź.\\n\", \"harness\": \"--parallel 8 --rag none --vision --think rozstrz,open,podaj,closed --temperature 0.6 --top-p 0.95 --top-k 20 --max-tokens 8000 --kb-essay data/kb/kompendium.jsonl --essay-topic-detect --essay-extend 2 --essay-min-words 300\"}, \"base\": {\"server\": \"-m models/unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-UD-IQ3_XXS.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek\", \"harness\": \"--bare --parallel 8 --vision --temperature 1.0 --top-p 0.95 --top-k 20\"}}",
+  "_comment_T3_old": "Do 27.09 03:45 (raport 10): {\"tuned\": {\"server\": \"-m models/unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-Q3_K_M.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek\", \"harness\": \"--parallel 8 --rag none --vision --think rozstrz,open,podaj,closed --temperature 0.6 --top-p 0.95 --top-k 20 --max-tokens 8000 --kb-essay data/kb/kompendium.jsonl\"}, \"base\": {\"server\": \"-m models/unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-Q3_K_M.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek\", \"harness\": \"--bare --parallel 8 --vision --temperature 1.0 --top-p 0.95 --top-k 20\"}}",
+  "_comment_T1_vote": "Raport 19: opcja (NIE włączona) — dopisać do T1 tuned harness \"--vote-closed 5 --vote-adaptive\" (głosowanie na zamkniętych): symulacja +1.0 pp (ścisły grade.py) / +0.75 pp (łagodny), koszt czasu — patrz raport 19.",
+  "_comment_T1_old2": "Do 27.09 08:40 (raport 22, decyzja użytkownika): T1 tuned harness kończył się na --rozstrz-hint (bez --essay-mode rubric --essay-rubric-fixed).",
+  "_comment_T1_old": "Do 27.09 07:30 (raporty 12 i 20, decyzja użytkownika): T1 tuned harness bez --rozstrz-hint.",
+  "_comment_T2_caption_old": "Do 27.09 06:05 (raport 15): T2 tuned bez klucza caption_server (PLLuM widział tylko znacznik [Obraz: ...]). caption_server = pomocniczy Qwen3.5-0.8B Q8_0 + mmproj F16 (1.017 GB) na porcie PORT+50; exam_run.sh dopisuje --caption-url. Powrót: usunąć klucz caption_server.",
+  "_comment_T2_old": "Do 27.09 04:50 (raport 12): T2 tuned harness = \"--parallel 8 --no-think-kwargs --temperature 0.0 --top-p 1.0 --top-k 1 --kb-essay data/kb/kompendium.jsonl --rag bm25 --rag-types podaj,rozstrz,open --rag-k 3 --kb-rag data/kb/kb_all_notes.jsonl --kb-rag-k 1\" (bez --fill-fields)."
+}

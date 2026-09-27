@@ -1,0 +1,318 @@
+{
+  "title": "09 — Zmiany po treningach: obecne rozwiązania vs nowe (paczki v2, sędzia gpt-6-luna)",
+  "intro": "Generowane przez `python eval/analyze.py --registry eval/runs_registry_v2.json`. Paczki v2 mają znaczniki `[Obraz: …]` jak oficjalny exam.json; sędzia `gpt-6-luna` dla wszystkich przebiegów; zadanie 2024/21 (filtr treści sędziego) poza mianownikiem. Wynik główny = 2024 + 2025 (119 pkt), potwierdzenie = 2026.\n\n## Podsumowanie: jak nowe rozwiązania zmieniają obecne (nd 01:00)\n\n| Track | Obecne (sob 20:00) | Nowe | Zmiana |\n|---|---|---|---|\n| **T1** | Gemma-4-12B QAT, `t1final`: 71.0% (2 seedy), 83.3% na 2026 | bez zmian | żaden z wariantów nie pomógł: stary prompt 72.3% (szum), kompendium w eseju 68.9%, RAG PolQA + baza 68.1%, temperatura 0.6 71.4% |\n| **T2** | PLLuM-12B-base + LoRA v1 (1.8 tys. przykładów): 41.2%, 26.7% na 2026; goła baza 0% | **ta sama baza + LoRA na ~12 tys. przykładów (przepis v1) + RAG PolQA top-3 i 1 notatka z bazy wiedzy: 52.9%, 41.7% na 2026** | **+11.7 pp (2024+2025), +15.0 pp (2026)**; przyrost względem gołej bazy +52.9 / +41.7 pp. Rozmiar bez zmian: 7.71 GB |\n| **T3** | Qwen3.5-4B Q4_K_M, 2.74 GB: 48.7 / 50.4% | **Qwen3.5-4B Q3_K_M, 2.29 GB, temperatura 0.6: 48.7 / 51.3%, 48.3% na 2026** | **rozmiar −0.45 GB (−16%) przy tym samym wyniku**; przy temperaturze 1.0 Q3_K_M miał duży rozrzut (38.7–48.7%) |\n\n**Co nie zadziałało** (szczegóły w raporcie 07): dane z rozumowaniem dla T2 (H-N15), dane v2 z kontekstem RAFT (H-N26), LoRA z maską myślenia dla T3 — bramka wykryła skrócenie myślenia o 77% (H-N22), Gemma-4 pt jako baza T2 (niestabilna w llama.cpp; H-N2), routing do Bielika (H-N23), wybór tematu eseju (H-H8), niższe kwantyzacje (IQ3_XXS 36%, IQ2_M 21%, Q3_K_S 36%).\n\n**Dane i koszt nocy (szacunki):** 10 243 nowych zadań E5 (odrzucone 15%; typy, epoki i zakres zgodne z limitami) + baza wiedzy (oś czasu 2817, postacie 940, pojęcia 627, kompendium +106); API: E5 ~6.6 $, E6 ~3.8 $, sędzia ~3 $ (szacunki `common.py`/`judge_openai.py`). GPU: Nebius H100 ~7.5 h (~29 $), L40S ~6 h (~10 $), Modal 5 treningów (~8 $), Forgehand (przedpłacone). Statystyki danych poniżej (sekcja E) dotyczą zbioru, na którym trenował zwycięzca T2 (`data/sft/v2plain`, bez kontekstu RAG).\n",
+  "main_sets": [
+    "test2024_v2",
+    "test2025_v2"
+  ],
+  "confirm_sets": [
+    "test2026_v2"
+  ],
+  "data_manifest": "data/sft/v2plain/manifest.jsonl",
+  "runs": {
+    "gemma4-qat-t1final__s42": {
+      "label": "T1 Gemma QAT t1final s42",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "gemma4-qat-t1final__s43": {
+      "label": "T1 Gemma QAT t1final s43",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "gemma4-qat-legacy__s42": {
+      "label": "T1 Gemma QAT stary prompt s42",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "gemma4-qat-legacy__s43": {
+      "label": "T1 Gemma QAT stary prompt s43",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "pllum-12b-base__bare": {
+      "label": "T2 PLLuM-12B-base goły",
+      "track": "T2",
+      "size_gb": 7.48
+    },
+    "pllum-12b-base-sft__v2": {
+      "label": "T2 PLLuM-12B-base + LoRA v1",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "gemma4-12b-pt__bare": {
+      "label": "T2 Gemma-4-12B pt goła",
+      "track": "T2",
+      "size_gb": 7.5
+    },
+    "gemma4-12b-pt-sft-merged": {
+      "label": "T2 Gemma-4-12B pt + LoRA v1 (scalona)",
+      "track": "T2",
+      "size_gb": 7.5,
+      "baseline": "gemma4-12b-pt__bare"
+    },
+    "q35-4b-q4__t3cfg": {
+      "label": "T3 Qwen3.5-4B Q4_K_M",
+      "track": "T3",
+      "size_gb": 2.74
+    },
+    "q35-4b-iq3xxs__t3cfg": {
+      "label": "T3 Qwen3.5-4B IQ3_XXS",
+      "track": "T3",
+      "size_gb": 1.95
+    },
+    "q35-4b-iq2m__t3cfg": {
+      "label": "T3 Qwen3.5-4B IQ2_M",
+      "track": "T3",
+      "size_gb": 1.76
+    },
+    "q35-2b-q4__t3cfg": {
+      "label": "T3 Qwen3.5-2B Q4_K_M",
+      "track": "T3",
+      "size_gb": 1.28
+    },
+    "q35-2b-q4__t3cfg-hyde": {
+      "label": "T3 Qwen3.5-2B Q4_K_M + HyDE",
+      "track": "T3",
+      "size_gb": 1.28
+    },
+    "bielik-4.5b-q4__v2": {
+      "label": "Bielik-4.5B-v3-Instruct Q4_K_M",
+      "track": "T3",
+      "size_gb": 2.9
+    },
+    "bielik-4.5b-q3km__v2": {
+      "label": "Bielik-4.5B-v3-Instruct Q3_K_M",
+      "track": "T3",
+      "size_gb": 2.3
+    },
+    "gemma4-qat-t1kb__s42": {
+      "label": "T1 Gemma QAT t1final + kompendium (esej) s42",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "gemma4-qat-t1kb__s43": {
+      "label": "T1 Gemma QAT t1final + kompendium (esej) s43",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "pllum-12b-base-sft__v2-kb": {
+      "label": "T2 PLLuM + LoRA v1 + kompendium (esej)",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-12b-base-sft__v2-kbdense": {
+      "label": "T2 PLLuM + LoRA v1 + kompendium hybryda",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2-think": {
+      "label": "T2 PLLuM + LoRA v2 think",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2-think-kb": {
+      "label": "T2 PLLuM + LoRA v2 think + kompendium",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2-answer": {
+      "label": "T2 PLLuM + LoRA v2 answer",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2-answer-kb": {
+      "label": "T2 PLLuM + LoRA v2 answer + kompendium",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "gemma4-12b-pt-sft-merged__diagA": {
+      "label": "T2 Gemma pt + LoRA v1, tylko tekst (diagnostyka)",
+      "track": "T2",
+      "size_gb": 7.38,
+      "baseline": "gemma4-12b-pt__bare"
+    },
+    "q35-4b-iq4xs__t3cfg": {
+      "label": "T3 Qwen3.5-4B IQ4_XS",
+      "track": "T3",
+      "size_gb": 2.48
+    },
+    "q35-4b-q3km__t3cfg": {
+      "label": "T3 Qwen3.5-4B Q3_K_M",
+      "track": "T3",
+      "size_gb": 2.29
+    },
+    "q35-4b-iq3xxs__t3kbrag": {
+      "label": "T3 Qwen3.5-4B IQ3_XXS + RAG z bazy wiedzy (hybryda)",
+      "track": "T3",
+      "size_gb": 1.95
+    },
+    "q35-4b-iq3xxs__t3lessthink": {
+      "label": "T3 Qwen3.5-4B IQ3_XXS, myślenie tylko rozstrzygnij/otwarte",
+      "track": "T3",
+      "size_gb": 1.95
+    },
+    "pllum-v2-answer-kbrag": {
+      "label": "T2 PLLuM + LoRA v2 answer + RAG z bazy wiedzy",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2-answer-polqa": {
+      "label": "T2 PLLuM + LoRA v2 answer + RAG PolQA + baza",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "q35-4b-q3km__t3cfg-s43": {
+      "label": "T3 Qwen3.5-4B Q3_K_M s43",
+      "track": "T3",
+      "size_gb": 2.29
+    },
+    "q35-4b-q3ks__t3cfg": {
+      "label": "T3 Qwen3.5-4B Q3_K_S",
+      "track": "T3",
+      "size_gb": 2.11
+    },
+    "pllum-v2full-answer": {
+      "label": "T2 PLLuM + LoRA v2 pełne dane, 2 epoki",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2full-answer-kbrag": {
+      "label": "T2 PLLuM + LoRA v2 pełne dane, 2 epoki + RAG z bazy",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v1recipe-full": {
+      "label": "T2 PLLuM + LoRA przepis v1 na pełnych danych (2 epoki)",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v1recipe-full-polqa": {
+      "label": "T2 PLLuM + LoRA przepis v1 pełne dane + RAG PolQA + baza",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2full-answer-polqa": {
+      "label": "T2 PLLuM + LoRA v2 pełne dane 2 ep. + RAG PolQA + baza",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "pllum-v2-answer-polqa-gate": {
+      "label": "T2 PLLuM + LoRA v2 answer + RAG PolQA + baza, bramka BM25 >= 12",
+      "track": "T2",
+      "size_gb": 7.71,
+      "baseline": "pllum-12b-base__bare"
+    },
+    "q35-4b-q4__t3cfg-s43": {
+      "label": "T3 Qwen3.5-4B Q4_K_M s43",
+      "track": "T3",
+      "size_gb": 2.74
+    },
+    "q35-4b-q3km__t3cfg-s44": {
+      "label": "T3 Qwen3.5-4B Q3_K_M s44",
+      "track": "T3",
+      "size_gb": 2.29
+    },
+    "q35-4b-q3km__t3cfg-t06": {
+      "label": "T3 Qwen3.5-4B Q3_K_M temp 0.6 s42",
+      "track": "T3",
+      "size_gb": 2.29
+    },
+    "q35-4b-q3km__t3cfg-t06-s43": {
+      "label": "T3 Qwen3.5-4B Q3_K_M temp 0.6 s43",
+      "track": "T3",
+      "size_gb": 2.29
+    },
+    "q35-4b-q3km__t3cfg-polqa": {
+      "label": "T3 Qwen3.5-4B Q3_K_M + RAG PolQA + baza",
+      "track": "T3",
+      "size_gb": 2.29
+    },
+    "gemma4-qat-t1polqa__s42": {
+      "label": "T1 Gemma QAT t1final + RAG PolQA + baza s42",
+      "track": "T1",
+      "size_gb": 6.98
+    },
+    "gemma4-qat-t1final-t06__s42": {
+      "label": "T1 Gemma QAT t1final temp 0.6 s42",
+      "track": "T1",
+      "size_gb": 6.98
+    }
+  },
+  "compare": [
+    {
+      "title": "T1: stary prompt vs t1final (s42)",
+      "before": "gemma4-qat-legacy__s42",
+      "after": "gemma4-qat-t1final__s42"
+    },
+    {
+      "title": "T1: t1final vs t1final + kompendium (s42)",
+      "before": "gemma4-qat-t1final__s42",
+      "after": "gemma4-qat-t1kb__s42"
+    },
+    {
+      "title": "T2: LoRA v1 vs LoRA v2 think",
+      "before": "pllum-12b-base-sft__v2",
+      "after": "pllum-v2-think"
+    },
+    {
+      "title": "T2: LoRA v2 answer vs v2 think",
+      "before": "pllum-v2-answer",
+      "after": "pllum-v2-think"
+    },
+    {
+      "title": "T3: Q4_K_M vs IQ3_XXS",
+      "before": "q35-4b-q4__t3cfg",
+      "after": "q35-4b-iq3xxs__t3cfg"
+    },
+    {
+      "title": "T2: LoRA v1 vs przepis v1 na pełnych danych",
+      "before": "pllum-12b-base-sft__v2",
+      "after": "pllum-v1recipe-full"
+    },
+    {
+      "title": "T2: LoRA v1 vs v2 pełne dane 2 epoki",
+      "before": "pllum-12b-base-sft__v2",
+      "after": "pllum-v2full-answer"
+    },
+    {
+      "title": "T2: LoRA v1 vs przepis v1 pełne dane + RAG PolQA",
+      "before": "pllum-12b-base-sft__v2",
+      "after": "pllum-v1recipe-full-polqa"
+    },
+    {
+      "title": "T3: Q3_K_M vs Q3_K_M + RAG PolQA + baza",
+      "before": "q35-4b-q3km__t3cfg",
+      "after": "q35-4b-q3km__t3cfg-polqa"
+    },
+    {
+      "title": "T1: t1final vs t1final + RAG PolQA + baza (s42)",
+      "before": "gemma4-qat-t1final__s42",
+      "after": "gemma4-qat-t1polqa__s42"
+    },
+    {
+      "title": "T3: Q3_K_M temp 1.0 vs 0.6 (s42)",
+      "before": "q35-4b-q3km__t3cfg",
+      "after": "q35-4b-q3km__t3cfg-t06"
+    },
+    {
+      "title": "T1: t1final temp 1.0 vs 0.6 (s42)",
+      "before": "gemma4-qat-t1final__s42",
+      "after": "gemma4-qat-t1final-t06__s42"
+    }
+  ]
+}
