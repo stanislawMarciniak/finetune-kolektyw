@@ -23,15 +23,16 @@
   },
   "T3": {
     "tuned": {
-      "server": "-m models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek --reasoning-budget 5000",
+      "server": "-m models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek --reasoning-budget 5000",
       "reasoning_budget_message": "\n\nNa podstawie powyższych rozważań podaję ostateczną odpowiedź.\n",
       "harness": "--parallel 8 --rag none --vision --think rozstrz,open,podaj,closed --temperature 0.6 --top-p 0.95 --top-k 20 --max-tokens 8000 --kb-essay data/kb/kompendium.jsonl --essay-mode structured --think-retry --match-retry"
     },
     "base": {
-      "server": "-m models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek",
+      "server": "-m models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek",
       "harness": "--bare --parallel 8 --vision --temperature 1.0 --top-p 0.95 --top-k 20"
     }
   },
+  "_comment_T3_v124k_old": "Do 27.09 09:25 (raport 18 §7, decyzja użytkownika): T3 tuned i base -m = models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf (1 532 889 600 B, sha256 2f2a141a41190092e97a8feeb6a54eccb8721a6851de3b5b8e7ea8057083b1f6, słownik 126 579 tokenów); reszta flag bez zmian. Powrót: podmienić ścieżkę -m w obu wariantach T3.",
   "_comment_T3_old3": "Do 27.09 08:00 (raport 21, decyzja użytkownika): T3 tuned harness bez \"--think-retry --match-retry\" (fallback od razu bez myślenia; dopasowania z cyframi bez powtórki). Powrót: usunąć obie flagi.",
   "_comment_T3_mix_old": "Do 27.09 07:30 (raport 18, decyzja użytkownika): T3 tuned i base -m = models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX.gguf (1 745 906 784 B); reszta flag bez zmian. Powrót: podmienić ścieżkę -m.",
   "_comment_T3_old2": "Do 27.09 05:35 (raport 10c): stock UD-IQ3_XXS 1.95 GB. {\"tuned\": {\"server\": \"-m models/unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-UD-IQ3_XXS.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek --reasoning-budget 5000\", \"reasoning_budget_message\": \"\\n\\nNa podstawie powyższych rozważań podaję ostateczną odpowiedź.\\n\", \"harness\": \"--parallel 8 --rag none --vision --think rozstrz,open,podaj,closed --temperature 0.6 --top-p 0.95 --top-k 20 --max-tokens 8000 --kb-essay data/kb/kompendium.jsonl --essay-topic-detect --essay-extend 2 --essay-min-words 300\"}, \"base\": {\"server\": \"-m models/unsloth/Qwen3.5-4B-GGUF/Qwen3.5-4B-UD-IQ3_XXS.gguf --mmproj models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 --reasoning-format deepseek\", \"harness\": \"--bare --parallel 8 --vision --temperature 1.0 --top-p 0.95 --top-k 20\"}}",

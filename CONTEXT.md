@@ -19,8 +19,8 @@ Konfiguracje serwera i harnessu: **`server/final_configs.json`** (czyta je `serv
 | Track | Model | Wynik (sędzia luna; 2024+2025 / 2026) |
 |---|---|---|
 | T1 | Gemma-4-12B-it QAT q4_0 + mmproj, myślenie, temp. 1.0, `--rozstrz-hint --essay-mode rubric --essay-rubric-fixed` (raporty 12, 20, 22) | 70.9%; 84.4% (3 seedy z `--rozstrz-hint`; esej rubric szac. +0.5 pp) |
-| T2 | PLLuM-12B-base-2512 Q4_K_M + LoRA `pllum-v1recipe-full` + RAG (BM25 PolQA top-3 + 1 notatka z bazy wiedzy) + `--fill-fields --ocr` + serwer opisów obrazów Qwen3.5-0.8B Q8_0 + mmproj (razem 8.72 GB, raport 15; serwer opisów z `GGML_CUDA_DISABLE_GRAPHS=1`) | **56.7%; 52.5%** (2 seedy, raport 20; goła baza: 0%) |
-| T3 | Qwen3.5-4B **IQ2_M-PL-E4K-MIX-S4K-V124K (1.53 GB, własna kwantyzacja z imatrix PL + przycięty słownik, raport 18)** + mmproj, myślenie oprócz eseju z limitem 5000 tokenów, temp. 0.6, esej `--essay-mode structured`, `--think-retry --match-retry`, `GGML_CUDA_DISABLE_GRAPHS=1` (raport 21) | 41.2% (3 seedy: 45.4 / 36.1 / 42.1); 42.8% (2026, 3 seedy) |
+| T2 | PLLuM-12B-base-2512 Q4_K_M + LoRA `pllum-v1recipe-full` + RAG (BM25 PolQA top-3 + 1 notatka z bazy wiedzy) + `--fill-fields --ocr` + serwer opisów obrazów Qwen3.5-0.8B Q8_0 + mmproj (razem 8.72 GB, raport 15; serwer opisów z `GGML_CUDA_DISABLE_GRAPHS=1`) | **56.7%; 52.5%** (2 seedy, raport 20; goła baza: 0% — celowo bez LoRA, szablonu czatu i pomocy harnessu, potwierdzone z organizatorami) |
+| T3 | Qwen3.5-4B **IQ2_M-PL-E4K-MIX-S4K-T64K (1.44 GB = 1 440 305 600 B, sha256 `dfc99b49…014e`; własna kwantyzacja z imatrix PL + słownik przycięty do 63 990 tokenów, raport 18 §6–7)** + mmproj, myślenie oprócz eseju z limitem 5000 tokenów, temp. 0.6, esej `--essay-mode structured`, `--think-retry --match-retry`, `GGML_CUDA_DISABLE_GRAPHS=1` (raport 21). Zapas: V124K 1.53 GB (`_comment_T3_v124k_old`, 41.2% / 42.8%) | 41.6% (2 seedy: 42.9 / 40.4); 45.0% (2026, 2 seedy) |
 
 - LoRA T2: trening na Modal (H100), 2 epoki, rank 32, lr 1e-4, dane `data/sft/v2plain/train_answer.jsonl` (10 479 przykładów, bez kontekstu RAG), szablon czatu z PLLuM-instruct. Job w `overnight/modal_train.py`.
 - T3 bez LoRA: LoRA z `--mask-think` niszczyła myślenie (bramka `eval/think_gate.py` → FAIL).
@@ -38,7 +38,8 @@ Konfiguracje serwera i harnessu: **`server/final_configs.json`** (czyta je `serv
 - **Strażnik `server/idle_shutdown.sh`** wyłącza maszynę po 45 min bez harnessu/treningu. Po restarcie maszyny trzeba go uruchomić ręcznie (nie startuje sam). W nocy maszyny powinny się wyłączyć.
 - **Na obu maszynach są jeszcze klucze** (`~/.fh_key`, `~/repo/.env`) — do usunięcia przed egzaminem (RUNBOOK krok 3).
 - Forgehand L40S (`ssh root@18.212.193.136`, sesja `01a0e0fa`, 30 GB RAM — tylko jeden serwer z mmproj naraz): zapas/eksperymenty, opis w `server/FORGEHAND.md`. Modal — wyczerpany.
-- Test na sucho finałów (27.09 08:42, H100, `exam_run.sh` na `test2026_v2`, 4 tracki naraz): T1 tuned 533 s, T2 tuned 168 s, T3 tuned 577 s, T2 base 386 s, T3 base 59 s; bez restartów, `check_answers.py` OK (szczegóły w RUNBOOK).
+- Test na sucho finałów (27.09 08:42, H100, `exam_run.sh` na `test2026_v2`, 4 tracki naraz): T1 tuned 533 s, T2 tuned 168 s, T3 tuned 577 s, T2 base 386 s, T3 base 59 s; bez restartów, `check_answers.py` OK (szczegóły w RUNBOOK). T3 T64K na H100 (09:24, razem z zimnym startem T1 tuned): T3 tuned 546 s, T3 base 74 s, 0 restartów, 0 błędów CUDA.
+- `idle_shutdown.sh` na H100 zatrzymany 09:26 (przed egzaminem; ponowne włączenie po egzaminie: `cd ~/repo && IDLE_MIN=45 nohup bash server/idle_shutdown.sh >> ~/logs/idle_shutdown.log 2>&1 &`).
 
 ## 4. Mapa repozytorium
 
@@ -72,6 +73,6 @@ Dane (w `.gitignore`, tylko lokalnie i na maszynach; wyjątki w repo: `data/kb/k
 ## 7. Co zostało do zrobienia
 
 1. **Przed 11:00 (pilne):** commit i push repozytorium (dane i wagi w `.gitignore`), link HTTPS bez tokenów; ustalić, kto ma TEAM_KEY — RUNBOOK krok 0.
-2. Rano (przed 10:45): H100 zsynchronizowany i przetestowany na sucho (08:42); zostaje: sync Nebius L40S (zapas), test T3 po decyzji o słowniku, zatrzymać zbędne procesy (`idle_shutdown.sh`), **usunąć klucze** — kroki w `server/RUNBOOK.md`.
+2. Rano (przed 10:45): H100 zsynchronizowany i przetestowany na sucho (08:42); T3 przełączony na T64K i przetestowany na H100 (09:24), Nebius L40S i Forgehand zsynchronizowane; zostaje: `idle_shutdown.sh` na Nebius L40S (zapas) nadal działa, **usunąć klucze** — kroki w `server/RUNBOOK.md`.
 3. Po 11:00: formularz „Get final exam questions” → paczka → `exam_run.sh` dla T1/T2/T3 tuned + T2 base (polecenia w RUNBOOK), `harness/check_answers.py` na każdym `answers.json`, wgrać trzy projekty (T1, T3, potem T2 z plikiem bazy). Kategorie, pola formularza i rozmiary — na końcu RUNBOOK.
 4. Po egzaminie: zatrzymać maszyny (`nebius compute instance stop --id ...`).

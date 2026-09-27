@@ -218,6 +218,9 @@ def vote_closed(kind, fmt, answers):
 
 def clean_answer(text):
     text = re.sub(r"<think>.*?</think>", "", text or "", flags=re.S)
+    if "</think>" in text:  # Qwen3.5 bez myślenia potrafi napisać szkic i samotne </think> przed właściwą odpowiedzią
+        head, _, tail = text.rpartition("</think>")
+        text = tail if tail.strip() else head
     return re.sub(r"\*\*(.+?)\*\*", r"\1", text).strip()
 
 

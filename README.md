@@ -12,7 +12,7 @@ Ocena: nasz sędzia LLM (`gpt-6-luna`) według zasad oceniania CKE, zamknięte a
 |---|---|---|---|---|
 | **T1** — Best exam score | Gemma-4-12B-it QAT q4_0 + mmproj, myślenie, harness z `--rozstrz-hint` i esejem wg kryteriów CKE | 7.15 GB | **71.5%** | **84.1%** |
 | **T2** — Biggest improvement | PLLuM-12B-base-2512 Q4_K_M + nasza LoRA + RAG (BM25) + OCR + opisy obrazów z Qwen3.5-0.8B | 8.72 GB łącznie (baza 7.48 GB) | **56.7%** (goła baza: 0%) | **52.5%** (goła baza: 0%) |
-| **T3** — Smallest model passing 35% | nasza kwantyzacja Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-V124K (imatrix PL, przycięty słownik) + mmproj | **1.53 GB** (największy plik) | **41.2%** (3 seedy: 45.4 / 36.1 / 42.1) | **42.8%** (3 seedy) |
+| **T3** — Smallest model passing 35% | nasza kwantyzacja Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-T64K (imatrix PL, słownik przycięty do 63 990 tokenów) + mmproj | **1.44 GB** (największy plik) | **41.6%** (2 seedy: 42.9 / 40.4) | **45.0%** (2 seedy) |
 
 Źródło prawdy dla wszystkich flag: [`server/final_configs.json`](server/final_configs.json) (argumenty `llama-server` i `harness/run_exam.py` dla każdego tracku, wariant `tuned` i `base`); uruchamia je [`server/exam_run.sh`](server/exam_run.sh), procedura egzaminu w [`server/RUNBOOK.md`](server/RUNBOOK.md).
 
@@ -49,7 +49,7 @@ python harness/run_exam.py --exam <katalog> --out <wynik> --base-url http://127.
 
 ## T2 — PLLuM-12B-base + LoRA (największy przyrost)
 
-**Model bazowy:** [`CYFRAGOVPL/PLLuM-12B-base-2512`](https://huggingface.co/CYFRAGOVPL/PLLuM-12B-base-2512) (pretrenowany, bez dostrojenia instrukcyjnego; oparty na Mistral-Nemo-Base-2407), GGUF z [`mradermacher/PLLuM-12B-base-2512-GGUF`](https://huggingface.co/mradermacher/PLLuM-12B-base-2512-GGUF). Wariant `base` = ta sama baza bez LoRA i bez pomocy harnessu (`--bare`): **0%** — goła baza nie trzyma formatu odpowiedzi.
+**Model bazowy:** [`CYFRAGOVPL/PLLuM-12B-base-2512`](https://huggingface.co/CYFRAGOVPL/PLLuM-12B-base-2512) (pretrenowany, bez dostrojenia instrukcyjnego; oparty na Mistral-Nemo-Base-2407), GGUF z [`mradermacher/PLLuM-12B-base-2512-GGUF`](https://huggingface.co/mradermacher/PLLuM-12B-base-2512-GGUF). Wariant `base` = ta sama baza bez LoRA, bez szablonu czatu i bez pomocy harnessu (`--bare`): **0%** — celowo (GGUF bazy nie ma szablonu czatu; baseline „untouched base model”, potwierdzone z organizatorami).
 
 **Model pomocniczy (opisy obrazów, bo PLLuM nie ma wizji):** [`unsloth/Qwen3.5-0.8B-GGUF`](https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF) (z [`Qwen/Qwen3.5-0.8B`](https://huggingface.co/Qwen/Qwen3.5-0.8B)).
 
@@ -87,26 +87,28 @@ python harness/run_exam.py ... --parallel 8 --no-think-kwargs --temperature 0.0 
 
 Indeks BM25 (`data/kb/polqa_index`, tantivy, ~4.4 GB, z polem słów obciętych do 6 znaków na polską fleksję) buduje `overnight/local/build_kb.py`; harness szuka go domyślnie w tym miejscu.
 
-## T3 — Qwen3.5-4B, własna kwantyzacja 1.53 GB (najmniejszy ≥ 35%)
+## T3 — Qwen3.5-4B, własna kwantyzacja 1.44 GB (najmniejszy ≥ 35%)
 
 **Model:** [`Qwen/Qwen3.5-4B`](https://huggingface.co/Qwen/Qwen3.5-4B); punkt wyjścia do kwantyzacji `Qwen3.5-4B-BF16.gguf` i `mmproj-F16.gguf` z [`unsloth/Qwen3.5-4B-GGUF`](https://huggingface.co/unsloth/Qwen3.5-4B-GGUF). Bez LoRA (LoRA z maską myślenia skracała myślenie o 77%, bramka `eval/think_gate.py`).
 
 | Plik | Bajty | sha256 |
 |---|---|---|
-| **`Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf`** (nasz, największy plik rozwiązania) | **1 532 889 600** | `2f2a141a41190092e97a8feeb6a54eccb8721a6851de3b5b8e7ea8057083b1f6` |
+| **`Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf`** (nasz, największy plik rozwiązania) | **1 440 305 600** | `dfc99b4924c532838ce4565f99b1d6f0101984c3e6f491bb6358d243f281014e` |
 | `mmproj-F16.gguf` (bez zmian, z unsloth) | 672 423 616 | — |
+| (poprzedni finał / zapas) `Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf` — słownik 126 579 tokenów; 41.2% / 42.8% (3 seedy) | 1 532 889 600 | `2f2a141a41190092e97a8feeb6a54eccb8721a6851de3b5b8e7ea8057083b1f6` |
 
-Jeśli organizatorzy liczą sumę plików, T3 ma 2.21 GB; liczony „największy plik” to model (1.53 GB).
+Jeśli organizatorzy liczą sumę plików, T3 ma 2.11 GB; liczony „największy plik” to model (1.44 GB). Powrót do V124K: `_comment_T3_v124k_old` w `server/final_configs.json`.
 
 Jak powstał plik (raporty 10b, 10c, 18):
 1. **Polski imatrix** (`imatrix-pl.gguf`) liczony na BF16 z korpusu ~370 tys. tokenów: 56 śladów rozumowania samego Qwen3.5-4B BF16 na naszych zadaniach syntetycznych E5 (w szablonie czatu z `<think>`) + ~650 KB tekstu z naszej bazy wiedzy (kompendium, oś czasu, postacie, pojęcia, zadania E5 z odpowiedziami); bez arkuszy 2024–2026. `llama-imatrix` z jednolinijkową łatką, która przy `--process-output` zbiera też `token_embd.weight` (osadzenia są wiązane z głowicą wyjściową).
 2. **Przepis typów tensorów:** unsloth UD-IQ2_M odczytany 1:1 z `Qwen3.5-4B-UD-IQ2_M.gguf` (gguf-py), a potem zmiany: `token_embd` Q4_K (**E4K**), `ffn_down` i `attn_qkv` z IQ2_S na IQ3_XXS — 47 tensorów (**MIX**), `ssm_out` Q5_K → Q4_K (**S4K**). `llama-quantize` z typem bazowym IQ2_M.
-3. **Przycięty słownik (V124K):** 248 320 → 126 579 tokenów. Zachowane są: każdy token widziany w korpusie 595 mln znaków PL (baza wiedzy, dane SFT, arkusze, wyjścia naszych modeli z angielskim rozumowaniem, PolQA, ~120 tys. artykułów Wikipedii) i 155 mln znaków EN (wikitext-103), tokeny łacińskie/ASCII/greckie o id < 60 000, wszystkie tokeny specjalne i bajtowe oraz domknięcie reguł BPE. Wiersze `token_embd` wycięte bajtowo z gotowego GGUF, bez ponownej kwantyzacji (−181.6 MB). Tokenizacja identyczna na tekście odłożonym, PPL bez zmian (`work/vt/`).
+3. **Przycięty słownik (V124K, poprzedni finał):** 248 320 → 126 579 tokenów. Zachowane są: każdy token widziany w korpusie 595 mln znaków PL (baza wiedzy, dane SFT, arkusze, wyjścia naszych modeli z angielskim rozumowaniem, PolQA, ~120 tys. artykułów Wikipedii) i 155 mln znaków EN (wikitext-103), tokeny łacińskie/ASCII/greckie o id < 60 000, wszystkie tokeny specjalne i bajtowe oraz domknięcie reguł BPE. Wiersze `token_embd` wycięte bajtowo z gotowego GGUF, bez ponownej kwantyzacji (−181.6 MB). Tokenizacja identyczna na tekście odłożonym, PPL bez zmian (`work/vt/`).
+4. **Słownik przycięty do 64k (T64K, finał):** ten sam `trim.py` na pełnym pliku S4K, ale z inną listą tokenów (`work/vt/K_top64k.txt`): top 64k zwykłych tokenów według `f_PL + f_myślenie + 0.25·f_EN` (częstości z korpusu PL, z rozumowania w naszych przebiegach i z wikitext) + tokeny specjalne/bajtowe/myślenia/wizji i domknięcie BPE → **63 990 tokenów**, −92.6 MB względem V124K. Inflacja tokenów ≤ 0.23% na odłożonym PolQA, PPL w granicach 1%. Egzamin (2 seedy, z `--think-retry --match-retry`): 2024+2025 42.9 / 40.4% (śr. 41.6%), 2026 51.7 / 38.3% (śr. 45.0%), zamknięte 60% (raport 18 §6–7).
 
 Harness T3: temp. 0.6, myślenie dla zadań krótkich (bez eseju) z limitem serwera 5000 tokenów i komunikatem domykającym; esej `--essay-mode structured` (plan z kompendium, akapit na aspekt, 336–650 słów; raport 10c); `--think-retry` (urwane myślenie → jedna powtórka z myśleniem, potem bez) i `--match-retry` (dopasowania z cyframi zamiast nazw; raport 21). Cały track z `GGML_CUDA_DISABLE_GRAPHS=1` (awarie `clip_encode` mmproj Qwen3.5 na H100 przy grafach CUDA, raport 21).
 
 ```bash
-GGML_CUDA_DISABLE_GRAPHS=1 llama-server -m ~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf \
+GGML_CUDA_DISABLE_GRAPHS=1 llama-server -m ~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf \
   --mmproj ~/models/unsloth/Qwen3.5-4B-GGUF/mmproj-F16.gguf -ub 4096 -b 4096 -c 98304 -np 8 \
   --reasoning-format deepseek --reasoning-budget 5000 \
   --reasoning-budget-message $'\n\nNa podstawie powyższych rozważań podaję ostateczną odpowiedź.\n'
@@ -146,7 +148,7 @@ Inne pliki: `harness/check_answers.py` (walidacja `answers.json` jak na stronie 
 | **wikitext-103** (`wikitext-103-raw-v1`) | częstości tokenów EN (T3) | [`Salesforce/wikitext`](https://huggingface.co/datasets/Salesforce/wikitext) | nie |
 | **Dane SFT LoRA T2** `data/sft/v2plain/` (10 479) | trening LoRA T2 | E1 `e1_real.py` (zadania CKE formuły 2015, stara matura, informator → format egzaminu, `gpt-6-luna`), E3 `e3_synthetic.py` (wiązki zadań, `gpt-6-sol`, weryfikacja na ślepo `gpt-6-luna`), E4 `e4_essays.py` (eseje `gpt-6-sol`, ocena CKE ≥ 12/15), **E5 `e5_bulk.py`** (10 243 zadania `gpt-6-luna` z weryfikacją na ślepo i filtrami przecieków, 15% odrzuconych), potem `train/build_sft_v2.py --no-raft --out-dir data/sft/v2plain`; specyfikacja `data_gen/SPEC.md` | nie (skrypty; zawierają wyciągi z arkuszy CKE) |
 | **Korpus kalibracyjny imatrix T3** (~370 tys. tokenów) + zbiory PPL | kwantyzacja T3 | `overnight/quant_calib_gen.py` (ślady BF16) + `overnight/quant_calib_build.py` | nie (skrypty) |
-| **Lista tokenów V124K** `work/vt/K_seen_a60k.txt` | przycinanie słownika T3 | `work/vt/count.py` → `select.py` / `cats.py` | **tak** |
+| **Lista tokenów T64K** `work/vt/K_top64k.txt` (finał) i V124K `work/vt/K_seen_a60k.txt` (zapas) | przycinanie słownika T3 | `work/vt/count.py` + `count_reason.py` → `select.py` / `cats.py` | **tak** |
 | **Arkusze CKE** matura z historii, formuła 2023 (maj 2023–2026) + zasady oceniania | tylko ewaluacja (2024, 2025 główne; 2026 kontrolny; 2023 dev); nigdy w treningu, bazie wiedzy ani imatrix | [cke.gov.pl — arkusze formuły 2023](https://cke.gov.pl/egzamin-maturalny/egzamin-maturalny-w-formule-2023/arkusze/); `overnight/local/cke_crawl.py` + `pdf_extract.py` → `eval/build_exam.py <rok>` → `harness/make_exam_pack.py --v2` | nie (materiały CKE) |
 | Starsze arkusze CKE (formuła 2015, stara matura), informator | trening (E1: 233 zadania, w LoRA 118 po filtrach) | jw. (`cke_crawl.py`) | nie |
 | Mock 2023 i benchmark organizatorów | test na sucho, kalibracja sędziego | strona organizatorów | nie |
@@ -163,7 +165,7 @@ Sprawdzone 27.09.2026 w kartach modeli/datasetów na Hugging Face (pole `license
 | PLLuM-12B-base-2512 i PLLuM-12B-instruct-2512 (szablon czatu) (T2) | **Apache 2.0** (baza Mistral-Nemo-Base-2407, też Apache 2.0) | [karta base](https://huggingface.co/CYFRAGOVPL/PLLuM-12B-base-2512), [karta instruct](https://huggingface.co/CYFRAGOVPL/PLLuM-12B-instruct-2512) |
 | GGUF PLLuM (mradermacher) | Apache 2.0 | [karta](https://huggingface.co/mradermacher/PLLuM-12B-base-2512-GGUF) |
 | Qwen3.5-4B (T3) i Qwen3.5-0.8B (T2, opisy obrazów), GGUF unsloth | **Apache 2.0** | [Qwen3.5-4B](https://huggingface.co/Qwen/Qwen3.5-4B/blob/main/LICENSE), [Qwen3.5-0.8B](https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/LICENSE), [unsloth 4B](https://huggingface.co/unsloth/Qwen3.5-4B-GGUF), [unsloth 0.8B](https://huggingface.co/unsloth/Qwen3.5-0.8B-GGUF) |
-| Nasze pochodne wagi: LoRA `pllum-v1recipe-full`, kwantyzacja `…-MIX-S4K-V124K.gguf`, `imatrix-pl.gguf` | licencja modelu bazowego: Apache 2.0 | — |
+| Nasze pochodne wagi: LoRA `pllum-v1recipe-full`, kwantyzacja `…-MIX-S4K-T64K.gguf` (i zapas `…-V124K.gguf`), `imatrix-pl.gguf` | licencja modelu bazowego: Apache 2.0 | — |
 | llama.cpp (serwer, kwantyzacja, gguf-py, konwersja LoRA) | MIT | [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) |
 | Unsloth, PEFT, TRL (trening) | Apache 2.0 | [unsloth](https://github.com/unslothai/unsloth), [peft](https://github.com/huggingface/peft), [trl](https://github.com/huggingface/trl) |
 | Tesseract + `tessdata` (OCR w T2) | Apache 2.0 | [tesseract](https://github.com/tesseract-ocr/tesseract), [tessdata_best](https://github.com/tesseract-ocr/tessdata_best) |
@@ -235,7 +237,7 @@ mkdir -p ~/train/pllum-12b-base && cp ~/repo/data/final_artifacts/pllum-v1recipe
 
 Kontrola rozmiarów: gemma 6 975 879 296 B, mmproj gemma 175 115 616 B, PLLuM 7 477 204 064 B, Qwen3.5-0.8B-Q8_0 811 843 840 B, mmproj 0.8B 204 987 232 B, mmproj 4B 672 423 616 B.
 
-Nasze artefakty (LoRA T2, GGUF T3) **nie są opublikowane na HF** — trzeba je odtworzyć (krok 4) albo dostać kopię od zespołu. Docelowe miejsca: `~/train/pllum-v1recipe-full/lora.gguf` i `~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf`.
+Nasze artefakty (LoRA T2, GGUF T3) **nie są opublikowane na HF** — trzeba je odtworzyć (krok 4) albo dostać kopię od zespołu. Docelowe miejsca: `~/train/pllum-v1recipe-full/lora.gguf` i `~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf`.
 
 ### 4. Artefakty własne
 
@@ -319,10 +321,11 @@ with open(os.path.expanduser("~/models/custom/qwen35-4b/work/tt_mix_s4k.txt"), "
 # 4) kwantyzacja + przycięcie słownika (lista tokenów w repo)
 $B/llama-quantize --imatrix $W/imatrix-pl.gguf --tensor-type-file $W/tt_mix_s4k.txt --token-embedding-type q4_k \
   $S/Qwen3.5-4B-BF16.gguf $W/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K.gguf IQ2_M 8
-python work/vt/trim.py $W/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K.gguf work/vt/K_seen_a60k.txt \
-  ~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf
-# kontrola: 126 579 tokenów; nasz plik ma 1 532 889 600 B i sha256 2f2a141a…b1f6
-sha256sum ~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf
+python work/vt/trim.py $W/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K.gguf work/vt/K_top64k.txt \
+  ~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf
+# kontrola: 63 990 tokenów; nasz plik ma 1 440 305 600 B i sha256 dfc99b49…014e
+sha256sum ~/models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf
+# zapas V124K: ta sama komenda z work/vt/K_seen_a60k.txt → …-V124K.gguf (126 579 tokenów, 1 532 889 600 B, sha256 2f2a141a…b1f6)
 ```
 
 Imatrix zależy od śladów rozumowania z próbkowaniem, więc odtworzony plik będzie miał ten sam rozmiar, ale inny sha256. Listę tokenów można też przeliczyć (`work/vt/count.py` → `work/vt/select.py`), ale korpus częstości zawiera nasze przebiegi `runs/` spoza repo — dlatego gotowa lista jest w repo.

@@ -142,3 +142,23 @@ Wnioski:
 - T64K (−92.6 MB) przeszedł ekran z mniejszym marginesem ryzyka (6/9 zachłannych identycznych, inflacja ≤ 0.23%), ale **nie był egzaminowany** (brak czasu i budżetu sędziego). Jest na L40S, sha256 `dfc99b4924c532838ce4565f99b1d6f0101984c3e6f491bb6358d243f281014e`.
 - **Rekomendacja: zostać przy S4K-V124K (1 532 889 600 B).** Plik T40K (sha256 `48d20bcfd1c05b2d24fd11a9b7d1c673b0fe0fdf8ea93c33df403c3b5bebfb49`) jest na obu maszynach Nebius i na Forgehand, ale nie nadaje się do finału.
 - Koszt sędziego tej rundy: ≈ $0.45 (limit $0.80).
+
+## 7. Egzamin S4K-T64K (27.09, 09:00–09:30)
+
+Konfiguracja taka sama jak dla T40K w §6: harness T3 z `--think-retry --match-retry`, harness na maszynach bez zmian, 3 arkusze na jednym serwerze `-np 24 -c 294912`, do tego `GGML_CUDA_DISABLE_GRAPHS=1`. Seed 42 szedł na Nebius L40S, seed 43 na Forgehand L40S; sha256 pliku sprawdzone na Forgehand. **0 restartów nadzorcy, 0 błędów CUDA i 0 błędów harnessu.** Czas: 11–13.5 min na arkusz (Nebius) i 14.5–15.5 min (Forgehand), wszystkie arkusze równolegle.
+
+| S4K-T64K (1 440 305 600 B) | 2024 | 2025 | śr. 24+25 | 2026 | zamknięte 24+25 | powtórki bez myślenia (24/25/26) |
+|---|---|---|---|---|---|---|
+| seed 42 (Nebius) | 40.7% | 45.0% | 42.9% | 51.7% | 12/20 | 1 / 0 / 0 |
+| seed 43 (Forgehand) | 42.4% | 38.3% | 40.4% | 38.3% | 12/20 | 1 / 1 / 0 |
+| **średnio** | 41.6% | 41.7% | **41.6%** ✓ | **45.0%** ✓ | **60%** ✓ | |
+| (S4K-V124K, 3 seedy, bez retry) | 37.3% | 45.0% | 41.2% | 42.8% | 53% | |
+| (S4K-T40K, 2 seedy, z retry) | 37.3% | 35.0% | 36.2% ✗ | 45.0% | 32.5% | |
+
+Wniosek: **T64K spełnia regułę decyzji**: ≥ 40% na 2024+2025, ≥ 38% na 2026, a zamknięte nie są gorsze niż w V124K. Plik jest o **92.6 MB mniejszy** od finału (1 440 305 600 vs 1 532 889 600 B). Plik `models/custom/qwen35-4b/Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-T64K.gguf`, sha256 `dfc99b4924c532838ce4565f99b1d6f0101984c3e6f491bb6358d243f281014e`, jest na obu maszynach Nebius i na Forgehand.
+Zastrzeżenia:
+- Tylko 2 seedy, a najsłabszy arkusz ma 38.3%.
+- T64K jechał z `--think-retry --match-retry`, a V124K bez nich, więc porównanie z V124K nie jest czyste.
+- Na H100 T64K nie był testowany (zakaz; tam trwa diagnoza awarii CUDA przy obrazach).
+
+Decyzja o przełączeniu należy do użytkownika; `final_configs.json` nie był zmieniany. Koszt sędziego: ≈ $0.45 (limit $0.50).
