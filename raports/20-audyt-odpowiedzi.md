@@ -9,7 +9,35 @@ Sędzia `gpt-6-luna`, tylko istniejące oceny (koszt sędziego **$0**, bez GPU, 
   - Pole `before` w grupie włącza sekcję H.
 - Przez tę zmianę liczby T1 różnią się nieco od raportów 12 i 22 (np. 2026 `fx-t1base-s43`). W v1 zadania spoza zakresu scalenia miały oceny skopiowane, teraz mają oceny ze źródła.
 
-## Zmiana zdolności modeli (TL;DR)
+## v3 (10:10): T3 = S4K-T64K i ostatnie bezpieczne zyski
+
+**T3 T64K (1.44 GB, 2 seedy, z `--think-retry --match-retry`) vs V124K (1.53 GB, 3 seedy, bez retry):** 41.6% vs 41.2% (24+25), 45.0% vs 42.8% (2026). Strata spada z 70.0 do 69.5 i z 34.3 do 33.0 pkt, czyli remis przy −93 MB.
+
+| Wymiar (24+25 / 2026) | V124K | T64K | Δ |
+|---|---|---|---|
+| zamknięte | 9.3 / 3.6 | 8.0 / 3.0 | −1.3 / −0.6 (P/F −1.5, wybór −0.8, dopasowanie +1.0) |
+| podaj / rozstrz / wyjaśnij | 33.3 / 16.7 | 33.5 / 16.0 | ±0.5 |
+| esej | 27.3 / 14.0 | 28.0 / 14.0 | +0.7 / 0 |
+| harness (fallback) | 3.0 / 2.7 | **1.0 / 0** | **−2.0 / −2.7** (efekt `--think-retry`) |
+| wiedza/fakt | 21.3 / 7.7 | 19.0 / 7.5 | −2.3 / −0.2 |
+| źle odczytany obraz | 7.0 / 3.0 | 9.0 / 6.5 | **+2.0 / +3.5** (część to dawne fallbacki, teraz z odpowiedzią, ale złą) |
+| rozumowanie | 6.0 / 3.3 | 5.0 / 1.0 | −1.0 / −2.3 |
+
+Epoki: wszystkie ±1 pkt. Esej bez zmian: ~1/15 pkt, 367–504 słowa, zawsze z „Temat nr X”.
+
+**Kandydaci na ostatnie zyski (przejrzane surowe odpowiedzi finałów: T1 `fx-t1rh` ×3, T2 `img-t2ocrcap` ×2, T3 T64K ×2, na 3 arkuszach):**
+
+| # | Wzorzec | Dowód | Zysk / arkusz | Zmiana | Ryzyko | Offline? |
+|---|---|---|---|---|---|---|
+| 1 | T1 fallback (myślenie urwane → odpowiedź bez myślenia); T1 nie ma `--think-retry` | 13 fallbacków na 9 arkuszach (1.4/arkusz): 2024/7 ×2, 11.1, 14.2; 2025/5.1 ×3, 14.1 ×2, 14.2, 19, 21.1; 2026/4.1. Fallback ma 0.31 pkt, to samo zadanie bez fallbacku w innych seedach wyraźnie więcej na 2025/19, 21.1, 2026/4.1 i 2024/11.1 | ≤ +0.33 (górna granica: +3 pkt / 9 arkuszy); realnie ~+0.2 przy skuteczności powtórki 5/7 jak w T3 | sama flaga `--think-retry` w T1 (kod w ca5e567, używany w T3) | średnie: ścieżka nie była jeszcze uruchamiana z Gemmą na H100. Każda powtórka to +1–3 min pełnego myślenia 12B | **nie** (wymaga inferencji). Da się sprawdzić tylko na sucho na 1 zadaniu z fallbackiem (np. 2025/5.1), a H100 jest zajęty |
+| 2 | T2: P/F z 2 stwierdzeniami odpowiedziane jedną literą | 2026/2 „P” w obu seedach (1 przypadek na 6 arkuszy × przebiegów; T1 i T3: 0) | ~+0.1 (1 pkt × ~50% × 1/3 arkuszy) | walidacja liczby stwierdzeń P/F + powtórka | zmiana w harnessie | tak (wykrywanie), ale zysk pomijalny → **nie** |
+| 3 | T3: odpowiedź po angielsku | 1 przypadek na 6 arkuszy: 2025/3.2 s43, polski z angielskim wtrąceniem. 0 pkt z powodu braku elementu, nie języka. Pozostałe trafienia heurystyki to fałszywe alarmy | ~0 | postprocess / prompt | ruszanie T3, na którym trwa poprawka `clean_answer` | tak; wynik: **nie warto** |
+| 4 | T3: dopasowanie cyframi | po `--match-retry` 0 przypadków; 2025/4 ma już nazwy („Franciszanie / Benedycjanie / Zakon Jezusowy”). Strata jest tylko u naszego ścisłego gradera | 0 (u egzaminatora już liczone) | — | — | **nie** |
+| 5 | Puste lub urwane odpowiedzi, esej < 300 słów albo bez numeru tematu | 0 pustych (odpowiedzi 1-literowe to zamknięte), 0 `finish_reason=length` poza fallbackami. Eseje: T1 387–563 słów, T2 458–496, T3 367–504; wszystkie z „Temat nr” | 0 | — | — | sprawdzone: **nic do naprawy** |
+
+**Werdykt:** w finałach nie ma taniej i bezpiecznej poprawki z zyskiem ponad szum. Jedyna o niezerowym oczekiwanym zysku to `--think-retry` w T1 (~+0.2 pkt/arkusz). Nie da się jej zweryfikować offline, a jej ryzyko dotyczy czasu i nieprzetestowanej kombinacji z Gemmą, więc przed zamrożeniem o 10:45 **rekomenduję nic nie zmieniać**. Przebiegi na sucho z H100 (`dryrun_0924_t64k_test2026`, `final_mock0915`, `mock_extra`) nie są na laptopie i ich nie ściągałem, więc ta ocena opiera się tylko na przebiegach testowych 2024–2026.
+
+## Zmiana zdolności modeli (TL;DR, v2 z 09:40)
 
 | Track | Przed (07:00) → finał | 24+25 | 2026 | Strata 24+25 / 2026 (pkt) | Co się zmieniło |
 |---|---|---|---|---|---|

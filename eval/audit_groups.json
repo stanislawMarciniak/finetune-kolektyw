@@ -505,8 +505,27 @@
   "T3-final": {
    "track": "T3",
    "role": "final",
-   "before": "T3-MIX",
-   "label": "T3 finał: Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-V124K 1.53 GB + esej structured (3 seedy; przebiegi bez --think-retry/--match-retry)",
+   "before": "T3-V124K",
+   "label": "T3 finał: Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-T64K 1.44 GB + esej structured + --think-retry --match-retry (2 seedy)",
+   "runs": {
+    "test2024_v2": [
+     "q35-4b-vt-mix-s4k-t64k__struct2-s42",
+     "q35-4b-vt-mix-s4k-t64k__struct2-s43"
+    ],
+    "test2025_v2": [
+     "q35-4b-vt-mix-s4k-t64k__struct2-s42",
+     "q35-4b-vt-mix-s4k-t64k__struct2-s43"
+    ],
+    "test2026_v2": [
+     "q35-4b-vt-mix-s4k-t64k__struct2-s42",
+     "q35-4b-vt-mix-s4k-t64k__struct2-s43"
+    ]
+   }
+  },
+  "T3-V124K": {
+   "track": "T3",
+   "role": "ref",
+   "label": "T3 finał z 09:40: …-S4K-V124K 1.53 GB (3 seedy, bez retry)",
    "runs": {
     "test2024_v2": [
      "q35-4b-vt-mix-s4k-v124k__struct2-s42",
@@ -577,7 +596,7 @@
   "T3-T40K": {
    "track": "T3",
    "role": "rejected",
-   "vs": "T3-final",
+   "vs": "T3-V124K",
    "vs_runs": {
     "test2024_v2": [
      "q35-4b-vt-mix-s4k-v124k__struct2-s42",

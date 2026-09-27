@@ -1,4 +1,4 @@
-# 20 — Audyt odpowiedzi: pełne tabele (wygenerowane `python3 eval/audit.py --out raports/20-audyt-tabele.md`, stan finałów z nd 27.09 ~09:40; sekcja H = poprzedni stan vs finał, I = statystyki esejów)
+# 20 — Audyt odpowiedzi: pełne tabele (wygenerowane `python3 eval/audit.py --out raports/20-audyt-tabele.md`, stan finałów z nd 27.09 ~10:10: T3 = S4K-T64K; sekcja H = poprzedni stan vs finał, I = statystyki esejów)
 
 ## A. Wyniki grup (średnia z seedów, sędzia luna)
 
@@ -25,7 +25,8 @@
 | T2-hyde | T2 --rag hyde | rejected | 51.3% | — | 2024×1, 2025×1 |
 | T2-kbk2 | T2 --kb-rag-k 2 | rejected | 53.8% | — | 2024×1, 2025×1 |
 | T2-kbk3 | T2 --kb-rag-k 3 | rejected | 56.3% | — | 2024×1, 2025×1 |
-| T3-final | T3 finał: Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-V124K 1.53 GB + esej structured (3 seedy; przebiegi bez --think-retry/--match-retry) | final | 41.2% | 42.8% | 2024×3, 2025×3, 2026×3 |
+| T3-final | T3 finał: Qwen3.5-4B IQ2_M-PL-E4K-MIX-S4K-T64K 1.44 GB + esej structured + --think-retry --match-retry (2 seedy) | final | 41.6% | 45.0% | 2024×2, 2025×2, 2026×2 |
+| T3-V124K | T3 finał z 09:40: …-S4K-V124K 1.53 GB (3 seedy, bez retry) | ref | 41.2% | 42.8% | 2024×3, 2025×3, 2026×3 |
 | T3-MIX | T3 stan z audytu 07:00: IQ2_M-PL-E4K-MIX 1.75 GB | ref | 42.9% | 45.8% | 2024×2, 2025×2, 2026×2 |
 | T3-retry | składnik finału: --think-retry --match-retry (na MIX, scalone, seedy sparowane) | near | 43.3% | 45.0% | 2024×2, 2025×1, 2026×1 |
 | T3-T40K | odrzucone: słownik przycięty do 40k (1.40 GB), z retry | rejected | 36.1% | 45.0% | 2024×2, 2025×2, 2026×2 |
@@ -35,92 +36,92 @@
 | T1-t1final-full@T1-essay-refine-kb3 | T1-t1final-full (seedy sparowane z T1-essay-refine-kb3) | ref | 71.0% | 83.3% | 2024×2, 2025×2, 2026×1 |
 | T1-t1final-full@T1-tiles | T1-t1final-full (seedy sparowane z T1-tiles) | ref | 71.0% | 84.2% | 2024×2, 2025×2, 2026×2 |
 | T3-MIX@T3-retry | T3-MIX (seedy sparowane z T3-retry) | ref | 42.9% | 45.0% | 2024×2, 2025×1, 2026×1 |
-| T3-final@T3-T40K | T3-final (seedy sparowane z T3-T40K) | ref | 40.8% | 42.5% | 2024×2, 2025×2, 2026×2 |
+| T3-V124K@T3-T40K | T3-V124K (seedy sparowane z T3-T40K) | ref | 40.8% | 42.5% | 2024×2, 2025×2, 2026×2 |
 
 ## B. Finały — strata wg: typ zadania (pkt; 2024+2025 = 119 pkt, 2026 = 60 pkt)
 
 | kategoria | max 24+25 | T1-final 24+25 | T2-final 24+25 | T3-final 24+25 | T1-final 2026 | T2-final 2026 | T3-final 2026 |
 |---|---|---|---|---|---|---|---|
-| closed_choice | 6 | 0.7 | 1.0 | 2.3 | 0 | 3.0 | 0.3 |
-| closed_tf | 8 | 2.0 | 4.0 | 3.0 | 0 | 2.0 | 1.3 |
-| closed_match | 6 | 2.3 | 2.0 | 4.0 | 0 | 2.0 | 2.0 |
-| podaj | 24 | 4.7 | 3.5 | 14.0 | 0 | 2.5 | 4.7 |
-| rozstrz | 28 | 5.0 | 18.0 | 14.0 | 4.3 | 9.5 | 10.0 |
-| wyjasnij | 17 | 3.7 | 6.0 | 5.3 | 1.0 | 3.5 | 2.0 |
-| essay | 30 | 15.6 | 17.0 | 27.3 | 4.2 | 6.0 | 14.0 |
-| **razem** |  | 33.9 | 51.5 | 70.0 | 9.5 | 28.5 | 34.3 |
+| closed_choice | 6 | 0.7 | 1.0 | 1.5 | 0 | 3.0 | 0.5 |
+| closed_tf | 8 | 2.0 | 4.0 | 1.5 | 0 | 2.0 | 1.0 |
+| closed_match | 6 | 2.3 | 2.0 | 5.0 | 0 | 2.0 | 1.5 |
+| podaj | 24 | 4.7 | 3.5 | 14.0 | 0 | 2.5 | 4.0 |
+| rozstrz | 28 | 5.0 | 18.0 | 14.0 | 4.3 | 9.5 | 9.5 |
+| wyjasnij | 17 | 3.7 | 6.0 | 5.5 | 1.0 | 3.5 | 2.5 |
+| essay | 30 | 15.6 | 17.0 | 28.0 | 4.2 | 6.0 | 14.0 |
+| **razem** |  | 33.9 | 51.5 | 69.5 | 9.5 | 28.5 | 33.0 |
 
 ## B. Finały — strata wg: epoka (pkt; 2024+2025 = 119 pkt, 2026 = 60 pkt)
 
 | kategoria | max 24+25 | T1-final 24+25 | T2-final 24+25 | T3-final 24+25 | T1-final 2026 | T2-final 2026 | T3-final 2026 |
 |---|---|---|---|---|---|---|---|
-| staro | 10 | 0.3 | 3.5 | 3.3 | 0 | 3.0 | 1.3 |
-| sred | 14 | 2.7 | 5.5 | 9.0 | 1.3 | 2.5 | 3.7 |
-| nowo | 17 | 3.7 | 4.0 | 10.7 | 1.0 | 4.5 | 2.3 |
-| xix | 17 | 3.7 | 5.5 | 5.7 | 1.0 | 3.5 | 4.7 |
-| 1914-39 | 17 | 4.0 | 9.5 | 9.7 | 1.0 | 4.5 | 4.0 |
-| iiws | 4 | 0.7 | 1.0 | 2.0 | 0 | 0 | 0.7 |
-| 1945-89 | 10 | 3.3 | 5.5 | 2.3 | 1.0 | 4.5 | 3.7 |
+| staro | 10 | 0.3 | 3.5 | 3.0 | 0 | 3.0 | 1.0 |
+| sred | 14 | 2.7 | 5.5 | 8.5 | 1.3 | 2.5 | 3.5 |
+| nowo | 17 | 3.7 | 4.0 | 10.5 | 1.0 | 4.5 | 2.5 |
+| xix | 17 | 3.7 | 5.5 | 5.0 | 1.0 | 3.5 | 3.5 |
+| 1914-39 | 17 | 4.0 | 9.5 | 9.5 | 1.0 | 4.5 | 4.0 |
+| iiws | 4 | 0.7 | 1.0 | 2.0 | 0 | 0 | 0.5 |
+| 1945-89 | 10 | 3.3 | 5.5 | 3.0 | 1.0 | 4.5 | 4.0 |
 | 1914-39 (esej) | 15 | 0 | 0 | 14.0 | 0 | 0 | 0 |
-| 1945-89 (esej) | 15 | 0 | 0 | 13.3 | 0 | 0 | 0 |
 | sred (esej) | 30 | 15.6 | 17.0 | 0 | 0 | 6.0 | 0 |
-| iiws (esej) | 0 | 0 | 0 | 0 | 4.2 | 0 | 14.0 |
-| **razem** |  | 33.9 | 51.5 | 70.0 | 9.5 | 28.5 | 34.3 |
+| xix (esej) | 15 | 0 | 0 | 14.0 | 4.2 | 0 | 0 |
+| iiws (esej) | 0 | 0 | 0 | 0 | 0 | 0 | 14.0 |
+| **razem** |  | 33.9 | 51.5 | 69.5 | 9.5 | 28.5 | 33.0 |
 
 ## B. Finały — strata wg: rodzaj błędu (pkt; 2024+2025 = 119 pkt, 2026 = 60 pkt)
 
 | kategoria | T1-final 24+25 | T2-final 24+25 | T3-final 24+25 | T1-final 2026 | T2-final 2026 | T3-final 2026 |
 |---|---|---|---|---|---|---|
-| wiedza/fakt | 4.7 | 7.5 | 21.3 | 1.0 | 4.0 | 7.7 |
-| źle odczytany obraz | 8.3 | 15.0 | 7.0 | 2.7 | 7.5 | 3.0 |
-| źle odczytany tekst źródła | 0.7 | 4.0 | 3.7 | 1.3 | 3.5 | 3.3 |
-| polecenie/format | 0 | 1.0 | 0.3 | 0 | 1.0 | 0 |
-| odpowiedź niepełna | 0 | 1.0 | 0.3 | 0 | 1.0 | 0.3 |
-| rozumowanie/logika | 0.7 | 6.0 | 6.0 | 0 | 5.5 | 3.3 |
-| harness (fallback/urwanie/błąd) | 2.3 | 0 | 3.0 | 0.3 | 0 | 2.7 |
+| wiedza/fakt | 4.7 | 7.5 | 19.0 | 1.0 | 4.0 | 7.5 |
+| źle odczytany obraz | 8.3 | 15.0 | 9.0 | 2.7 | 7.5 | 6.5 |
+| źle odczytany tekst źródła | 0.7 | 4.0 | 4.0 | 1.3 | 3.5 | 4.0 |
+| polecenie/format | 0 | 1.0 | 0 | 0 | 1.0 | 0 |
+| odpowiedź niepełna | 0 | 1.0 | 2.5 | 0 | 1.0 | 0 |
+| rozumowanie/logika | 0.7 | 6.0 | 5.0 | 0 | 5.5 | 1.0 |
+| harness (fallback/urwanie/błąd) | 2.3 | 0 | 1.0 | 0.3 | 0 | 0 |
 | sędzia/grader za surowy (tylko ewaluacja) | 1.7 | 0 | 1.0 | 0 | 0 | 0 |
 | esej A: aspekty (powierzchowne/brak) | 10.6 | 13.0 | 18.3 | 3.0 | 5.0 | 9.2 |
-| esej A: błędy merytoryczne | 5.0 | 4.0 | 5.1 | 1.2 | 1.0 | 2.5 |
-| esej B: spójność/długość | 0 | 0 | 3.9 | 0 | 0 | 2.2 |
-| **razem** | 33.9 | 51.5 | 70.0 | 9.5 | 28.5 | 34.3 |
+| esej A: błędy merytoryczne | 5.0 | 4.0 | 5.8 | 1.2 | 1.0 | 2.9 |
+| esej B: spójność/długość | 0 | 0 | 3.9 | 0 | 0 | 1.9 |
+| **razem** | 33.9 | 51.5 | 69.5 | 9.5 | 28.5 | 33.0 |
 
 ## B. Finały — strata wg: obraz (pkt; 2024+2025 = 119 pkt, 2026 = 60 pkt)
 
 | kategoria | max 24+25 | T1-final 24+25 | T2-final 24+25 | T3-final 24+25 | T1-final 2026 | T2-final 2026 | T3-final 2026 |
 |---|---|---|---|---|---|---|---|
-| art | 9 | 1.0 | 3.0 | 5.3 | 0 | 0 | 0 |
-| artefact | 5 | 1.3 | 4.0 | 3.0 | 1.7 | 6.0 | 4.3 |
-| brak obrazu | 61 | 22.6 | 25.0 | 42.0 | 5.5 | 10.0 | 19.0 |
-| cartoon | 12 | 3.7 | 6.5 | 4.0 | 1.0 | 6.0 | 4.3 |
-| chart | 1 | 0.7 | 0 | 0.3 | 0 | 0 | 0 |
-| map | 12 | 3.0 | 5.0 | 7.3 | 1.3 | 5.0 | 4.3 |
-| photo | 11 | 1.0 | 3.0 | 4.7 | 0 | 0 | 0 |
-| poster | 4 | 0.3 | 2.5 | 1.3 | 0 | 0.5 | 0.7 |
-| press | 4 | 0.3 | 2.5 | 2.0 | 0 | 1.0 | 1.7 |
-| **razem** |  | 33.9 | 51.5 | 70.0 | 9.5 | 28.5 | 34.3 |
+| art | 9 | 1.0 | 3.0 | 5.5 | 0 | 0 | 0 |
+| artefact | 5 | 1.3 | 4.0 | 2.5 | 1.7 | 6.0 | 3.0 |
+| brak obrazu | 61 | 22.6 | 25.0 | 43.5 | 5.5 | 10.0 | 20.0 |
+| cartoon | 12 | 3.7 | 6.5 | 4.0 | 1.0 | 6.0 | 5.0 |
+| chart | 1 | 0.7 | 0 | 0.5 | 0 | 0 | 0 |
+| map | 12 | 3.0 | 5.0 | 5.5 | 1.3 | 5.0 | 3.5 |
+| photo | 11 | 1.0 | 3.0 | 4.5 | 0 | 0 | 0 |
+| poster | 4 | 0.3 | 2.5 | 1.0 | 0 | 0.5 | 0 |
+| press | 4 | 0.3 | 2.5 | 2.5 | 0 | 1.0 | 1.5 |
+| **razem** |  | 33.9 | 51.5 | 69.5 | 9.5 | 28.5 | 33.0 |
 
 ## B. Finały — strata wg: rodzaj źródła (pkt; 2024+2025 = 119 pkt, 2026 = 60 pkt)
 
 | kategoria | max 24+25 | T1-final 24+25 | T2-final 24+25 | T3-final 24+25 | T1-final 2026 | T2-final 2026 | T3-final 2026 |
 |---|---|---|---|---|---|---|---|
-| bez źródła | 32 | 16.6 | 17.0 | 29.0 | 4.2 | 6.0 | 14.7 |
-| obraz | 27 | 7.3 | 14.0 | 11.7 | 1.0 | 7.0 | 3.3 |
-| tekst | 29 | 6.0 | 8.0 | 13.0 | 1.3 | 4.0 | 4.3 |
-| tekst+obraz | 31 | 4.0 | 12.5 | 16.3 | 3.0 | 11.5 | 12.0 |
-| **razem** |  | 33.9 | 51.5 | 70.0 | 9.5 | 28.5 | 34.3 |
+| bez źródła | 32 | 16.6 | 17.0 | 30.0 | 4.2 | 6.0 | 14.5 |
+| obraz | 27 | 7.3 | 14.0 | 10.5 | 1.0 | 7.0 | 3.0 |
+| tekst | 29 | 6.0 | 8.0 | 13.5 | 1.3 | 4.0 | 5.5 |
+| tekst+obraz | 31 | 4.0 | 12.5 | 15.5 | 3.0 | 11.5 | 10.0 |
+| **razem** |  | 33.9 | 51.5 | 69.5 | 9.5 | 28.5 | 33.0 |
 
 ## C. Typ × epoka — strata finałów razem (pkt, 3 arkusze, suma T1+T2+T3)
 
 | typ \ epoka | staro | sred | nowo | xix | 1914-39 | iiws | 1945-89 | razem |
 |---|---|---|---|---|---|---|---|---|
-| closed_choice | 1.0 | 0.7 | 2.3 | 2.0 | 1.3 | 0 | 0 | 7.3 |
-| closed_tf | 1.0 | 0 | 1.7 | 3.3 | 6.3 | 0 | 0 | 12.3 |
-| closed_match | 0 | 6.0 | 5.7 | 0 | 0 | 0.7 | 0 | 12.3 |
-| podaj | 2.0 | 4.0 | 7.5 | 1.7 | 10.7 | 1.0 | 2.5 | 29.3 |
-| rozstrz | 7.2 | 11.5 | 7.7 | 16.3 | 10.0 | 2.7 | 5.5 | 60.8 |
-| wyjasnij | 0.3 | 2.5 | 1.3 | 0.7 | 4.3 | 0 | 12.3 | 21.5 |
-| essay | 0 | 38.6 | 0 | 0 | 14.0 | 18.2 | 13.3 | 84.1 |
-| **razem** | 11.5 | 63.3 | 26.2 | 24.0 | 46.7 | 22.5 | 33.7 | 227.8 |
+| closed_choice | 1.0 | 0.5 | 3.2 | 1.0 | 1.0 | 0 | 0 | 6.7 |
+| closed_tf | 1.0 | 0 | 1.0 | 2.5 | 6.0 | 0 | 0 | 10.5 |
+| closed_match | 0 | 6.3 | 6.0 | 0 | 0 | 0.5 | 0 | 12.8 |
+| podaj | 1.8 | 4.0 | 6.5 | 1.5 | 10.8 | 1.0 | 3.0 | 28.7 |
+| rozstrz | 7.0 | 11.2 | 8.0 | 16.2 | 10.0 | 2.7 | 5.3 | 60.3 |
+| wyjasnij | 0 | 2.0 | 1.5 | 1.0 | 4.7 | 0 | 13.0 | 22.2 |
+| essay | 0 | 38.6 | 0 | 18.2 | 14.0 | 14.0 | 0 | 84.8 |
+| **razem** | 10.8 | 62.6 | 26.2 | 40.4 | 46.5 | 18.2 | 21.3 | 226.0 |
 
 ## D. T1-final: rodzaj błędu × typ zadania (pkt, 3 arkusze)
 
@@ -152,73 +153,72 @@
 
 | błąd \ typ | closed_choice | closed_tf | closed_match | podaj | rozstrz | wyjasnij | essay | razem |
 |---|---|---|---|---|---|---|---|---|
-| wiedza/fakt | 2.7 | 4.3 | 4.3 | 16.0 | 1.7 | 0 | 0 | 29.0 |
-| źle odczytany obraz | 0 | 0 | 0 | 0 | 6.7 | 3.3 | 0 | 10.0 |
-| źle odczytany tekst źródła | 0 | 0 | 0 | 1.3 | 5.3 | 0.3 | 0 | 7.0 |
-| polecenie/format | 0 | 0 | 0.3 | 0 | 0 | 0 | 0 | 0.3 |
-| odpowiedź niepełna | 0 | 0 | 0 | 0.3 | 0.3 | 0 | 0 | 0.7 |
-| rozumowanie/logika | 0 | 0 | 0.3 | 0 | 6.3 | 2.7 | 0 | 9.3 |
-| harness (fallback/urwanie/błąd) | 0 | 0 | 0 | 1.0 | 3.7 | 1.0 | 0 | 5.7 |
+| wiedza/fakt | 2.0 | 2.5 | 5.5 | 14.5 | 1.5 | 0.5 | 0 | 26.5 |
+| źle odczytany obraz | 0 | 0 | 0 | 1.0 | 10.0 | 4.5 | 0 | 15.5 |
+| źle odczytany tekst źródła | 0 | 0 | 0 | 0.5 | 7.5 | 0 | 0 | 8.0 |
+| odpowiedź niepełna | 0 | 0 | 0 | 1.5 | 0 | 1.0 | 0 | 2.5 |
+| rozumowanie/logika | 0 | 0 | 0 | 0 | 4.0 | 2.0 | 0 | 6.0 |
+| harness (fallback/urwanie/błąd) | 0 | 0 | 0 | 0.5 | 0.5 | 0 | 0 | 1.0 |
 | sędzia/grader za surowy (tylko ewaluacja) | 0 | 0 | 1.0 | 0 | 0 | 0 | 0 | 1.0 |
-| esej A: aspekty (powierzchowne/brak) | 0 | 0 | 0 | 0 | 0 | 0 | 27.6 | 27.6 |
-| esej A: błędy merytoryczne | 0 | 0 | 0 | 0 | 0 | 0 | 7.7 | 7.7 |
-| esej B: spójność/długość | 0 | 0 | 0 | 0 | 0 | 0 | 6.1 | 6.1 |
+| esej A: aspekty (powierzchowne/brak) | 0 | 0 | 0 | 0 | 0 | 0 | 27.5 | 27.5 |
+| esej A: błędy merytoryczne | 0 | 0 | 0 | 0 | 0 | 0 | 8.7 | 8.7 |
+| esej B: spójność/długość | 0 | 0 | 0 | 0 | 0 | 0 | 5.8 | 5.8 |
 
 ## E. Zadania trudne dla wszystkich finałów (średnio ≤ 34% punktów w każdym)
 
 | zadanie | typ | epoka | obraz | max | T1-final śr. pkt (błąd) | T2-final śr. pkt (błąd) | T3-final śr. pkt (błąd) |
 |---|---|---|---|---|---|---|---|
-| 2024/7 | rozstrz | sred | brak obrazu | 1 | 0 (harness) | 0 (wiedza) | 0 (tekst) |
+| 2024/7 | rozstrz | sred | brak obrazu | 1 | 0 (harness) | 0 (wiedza) | 0 (wiedza) |
 | 2024/11.1 | closed_match | nowo | art | 1 | 0.33 (wiedza) | 0 (wiedza) | 0 (wiedza) |
 | 2024/14.1 | rozstrz | xix | map | 1 | 0 (obraz) | 0 (obraz) | 0 (obraz) |
 | 2024/19.2 | podaj | 1914-39 | artefact | 1 | 0.33 (obraz) | 0 (wiedza) | 0 (wiedza) |
-| 2025/14.1 | rozstrz | xix | map | 1 | 0 (harness) | 0 (obraz) | 0 (harness) |
-| 2025/22 | rozstrz | iiws | brak obrazu | 1 | 0.33 (wiedza) | 0 (wiedza) | 0 (rozumowanie) |
+| 2025/14.1 | rozstrz | xix | map | 1 | 0 (harness) | 0 (obraz) | 0 (obraz) |
+| 2025/22 | rozstrz | iiws | brak obrazu | 1 | 0.33 (wiedza) | 0 (wiedza) | 0 (tekst) |
 | 2026/12.2 | rozstrz | nowo | map | 1 | 0 (obraz) | 0 (tekst) | 0 (obraz) |
-| 2026/14.2 | rozstrz | xix | artefact | 1 | 0.33 (obraz) | 0 (obraz) | 0 (tekst) |
-| 2026/18.2 | rozstrz | 1914-39 | artefact | 1 | 0 (tekst) | 0 (obraz) | 0.33 (tekst) |
 
 ## F. Rozbieżności między finałami (różnica ≥ 67 pp udziału punktów)
 
 | zadanie | typ | epoka | obraz | udział pkt | rozwiązuje | nie rozwiązuje (błąd) |
 |---|---|---|---|---|---|---|
 | 2024/1 | rozstrz | staro | photo | T1=100% T2=0% T3=0% | T1-final | T2-final: obraz; T3-final: obraz |
-| 2024/2 | rozstrz | staro | map | T1=100% T2=50% T3=0% | T1-final | T3-final: harness |
-| 2024/5.1 | rozstrz | sred | map | T1=100% T2=0% T3=33% | T1-final | T2-final: obraz; T3-final: obraz |
+| 2024/5.1 | rozstrz | sred | map | T1=100% T2=0% T3=0% | T1-final | T2-final: obraz; T3-final: obraz |
 | 2024/8.1 | podaj | nowo | art | T1=67% T2=100% T3=0% | T2-final | T3-final: wiedza |
-| 2024/9 | rozstrz | nowo | art | T1=100% T2=0% T3=33% | T1-final | T2-final: rozumowanie; T3-final: obraz |
+| 2024/9 | rozstrz | nowo | art | T1=100% T2=0% T3=50% | T1-final | T2-final: rozumowanie |
+| 2024/11.2 | wyjasnij | nowo | art | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: rozumowanie |
 | 2024/12.1 | podaj | nowo | photo | T1=33% T2=100% T3=0% | T2-final | T1-final: obraz; T3-final: wiedza |
-| 2024/12.2 | podaj | nowo | photo | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: wiedza |
-| 2024/18 | rozstrz | 1914-39 | poster | T1=100% T2=0% T3=67% | T1-final | T2-final: rozumowanie |
+| 2024/17.1 | wyjasnij | xix | cartoon | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: rozumowanie |
+| 2024/18 | rozstrz | 1914-39 | poster | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: rozumowanie |
 | 2024/22.1 | podaj | iiws | brak obrazu | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: wiedza |
 | 2024/23.2 | rozstrz | 1945-89 | poster | T1=67% T2=0% T3=100% | T3-final | T2-final: obraz |
-| 2024/24 | rozstrz | 1945-89 | map | T1=100% T2=0% T3=67% | T1-final | T2-final: obraz |
+| 2024/24 | rozstrz | 1945-89 | map | T1=100% T2=0% T3=50% | T1-final | T2-final: obraz |
 | 2025/2 | rozstrz | staro | brak obrazu | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: niepelna |
-| 2025/4 | closed_match | sred | brak obrazu | T1=50% T2=100% T3=17% | T2-final | T3-final: sedzia |
+| 2025/4 | closed_match | sred | brak obrazu | T1=50% T2=100% T3=0% | T2-final | T3-final: sedzia |
+| 2025/7.1 | rozstrz | sred | map | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: rozumowanie |
 | 2025/9.2 | podaj | nowo | brak obrazu | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: wiedza |
 | 2025/9.3 | podaj | nowo | brak obrazu | T1=0% T2=100% T3=0% | T2-final | T1-final: wiedza; T3-final: wiedza |
-| 2025/10 | closed_tf | nowo | artefact | T1=100% T2=0% T3=33% | T1-final | T2-final: obraz; T3-final: wiedza |
-| 2025/11.2 | rozstrz | nowo | brak obrazu | T1=100% T2=0% T3=33% | T1-final | T2-final: rozumowanie; T3-final: wiedza |
+| 2025/10 | closed_tf | nowo | artefact | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: obraz |
+| 2025/11.2 | rozstrz | nowo | brak obrazu | T1=100% T2=0% T3=0% | T1-final | T2-final: rozumowanie; T3-final: tekst |
 | 2025/15.2 | rozstrz | xix | brak obrazu | T1=67% T2=0% T3=100% | T3-final | T2-final: tekst |
 | 2025/16.2 | rozstrz | xix | press | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: rozumowanie |
-| 2025/17.2 | closed_choice | 1914-39 | cartoon | T1=100% T2=0% T3=67% | T1-final | T2-final: wiedza |
+| 2025/17.2 | closed_choice | 1914-39 | cartoon | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: wiedza |
 | 2025/19 | podaj | 1914-39 | brak obrazu | T1=33% T2=100% T3=0% | T2-final | T1-final: wiedza; T3-final: wiedza |
-| 2025/21.2 | rozstrz | 1914-39 | press | T1=100% T2=50% T3=0% | T1-final | T3-final: obraz |
+| 2025/21.2 | rozstrz | 1914-39 | press | T1=100% T2=50% T3=0% | T1-final | T3-final: wiedza |
+| 2025/23 | podaj | 1945-89 | art | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: niepelna |
 | 2026/2 | closed_tf | staro | brak obrazu | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: polecenie |
-| 2026/3.1 | rozstrz | staro | map | T1=100% T2=0% T3=33% | T1-final | T2-final: rozumowanie; T3-final: rozumowanie |
+| 2026/3.1 | rozstrz | staro | map | T1=100% T2=0% T3=50% | T1-final | T2-final: rozumowanie |
 | 2026/3.2 | closed_choice | staro | map | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: wiedza |
 | 2026/5.1 | podaj | sred | brak obrazu | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: niepelna |
 | 2026/6.1 | closed_match | sred | brak obrazu | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: wiedza |
-| 2026/6.2 | rozstrz | sred | brak obrazu | T1=0% T2=100% T3=0% | T2-final | T1-final: wiedza; T3-final: harness |
-| 2026/10.1 | closed_choice | nowo | brak obrazu | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: tekst |
-| 2026/13 | closed_match | nowo | artefact | T1=100% T2=0% T3=83% | T1-final, T3-final | T2-final: obraz |
-| 2026/14.3 | closed_tf | xix | artefact | T1=100% T2=0% T3=33% | T1-final | T2-final: wiedza; T3-final: wiedza |
-| 2026/15.2 | closed_choice | xix | cartoon | T1=100% T2=0% T3=67% | T1-final | T2-final: obraz |
+| 2026/6.2 | rozstrz | sred | brak obrazu | T1=0% T2=100% T3=0% | T2-final | T1-final: wiedza; T3-final: tekst |
+| 2026/10.1 | closed_choice | nowo | brak obrazu | T1=100% T2=0% T3=50% | T1-final | T2-final: tekst |
+| 2026/13 | closed_match | nowo | artefact | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: obraz |
+| 2026/14.3 | closed_tf | xix | artefact | T1=100% T2=0% T3=50% | T1-final | T2-final: wiedza |
+| 2026/15.2 | closed_choice | xix | cartoon | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: obraz |
 | 2026/17 | rozstrz | xix | brak obrazu | T1=67% T2=100% T3=0% | T2-final | T3-final: tekst |
 | 2026/18.1 | podaj | 1914-39 | artefact | T1=100% T2=0% T3=0% | T1-final | T2-final: wiedza; T3-final: wiedza |
 | 2026/19.1 | rozstrz | 1914-39 | press | T1=100% T2=0% T3=0% | T1-final | T2-final: tekst; T3-final: tekst |
-| 2026/20 | rozstrz | 1914-39 | cartoon | T1=100% T2=25% T3=67% | T1-final | T2-final: rozumowanie |
-| 2026/22 | rozstrz | 1945-89 | brak obrazu | T1=100% T2=0% T3=100% | T1-final, T3-final | T2-final: wiedza |
+| 2026/20 | rozstrz | 1914-39 | cartoon | T1=100% T2=25% T3=50% | T1-final | T2-final: rozumowanie |
+| 2026/22 | rozstrz | 1945-89 | brak obrazu | T1=100% T2=0% T3=50% | T1-final | T2-final: wiedza |
 | 2026/23.2 | podaj | 1945-89 | cartoon | T1=100% T2=100% T3=0% | T1-final, T2-final | T3-final: wiedza |
 
 ## I. Eseje — statystyki ocen (wszystkie próbki grupy, 3 arkusze)
@@ -244,7 +244,8 @@
 | T2-hyde | 2 | 6.50 | 5.50 | 4.00 | 2.00 | 3.00 | 0 / 3 / 2 / 1 |
 | T2-kbk2 | 2 | 8.00 | 7.00 | 3.50 | 2.00 | 3.00 | 0 / 4 / 2 / 0 |
 | T2-kbk3 | 2 | 9.50 | 7.00 | 1.00 | 0.50 | 3.00 | 0 / 4 / 2 / 0 |
-| T3-final | 9 | 1.22 | 2.44 | 6.89 | 2.67 | 0.89 | 0 / 0 / 22 / 5 |
+| T3-final | 6 | 1.00 | 2.50 | 8.67 | 3.00 | 1.00 | 0 / 0 / 15 / 3 |
+| T3-V124K | 9 | 1.22 | 2.44 | 6.89 | 2.67 | 0.89 | 0 / 0 / 22 / 5 |
 | T3-MIX | 6 | 0.50 | 2.00 | 7.33 | 2.50 | 0.50 | 0 / 0 / 12 / 6 |
 | T3-retry | 4 | 0.50 | 1.75 | 7.25 | 2.25 | 0.50 | 0 / 0 / 7 / 5 |
 | T3-T40K | 6 | 0.83 | 2.50 | 7.67 | 3.00 | 0.83 | 0 / 0 / 15 / 3 |
@@ -254,7 +255,7 @@
 | T1-t1final-full@T1-essay-refine-kb3 | 5 | 8.20 | 6.60 | 2.20 | 1.20 | 2.80 | 1 / 8 / 6 / 0 |
 | T1-t1final-full@T1-tiles | 6 | 8.83 | 7.00 | 1.83 | 1.00 | 2.83 | 1 / 11 / 6 / 0 |
 | T3-MIX@T3-retry | 4 | 0.50 | 1.75 | 7.25 | 2.25 | 0.50 | 0 / 0 / 7 / 5 |
-| T3-final@T3-T40K | 6 | 1.17 | 2.33 | 6.00 | 2.67 | 0.83 | 0 / 0 / 14 / 4 |
+| T3-V124K@T3-T40K | 6 | 1.17 | 2.33 | 6.00 | 2.67 | 0.83 | 0 / 0 / 14 / 4 |
 
 ## H. Poprzedni stan vs obecny finał — strata (pkt), wg typu, epoki i błędu
 
@@ -285,7 +286,7 @@ Wg: epoka
 | iiws | 0.7 | 0.7 | +0.0 | 0 | 0 | +0.0 |
 | 1945-89 | 3.3 | 3.3 | +0.0 | 1.0 | 1.0 | +0.0 |
 | sred (esej) | 15.6 | 15.6 | +0.0 | 0 | 0 | +0.0 |
-| iiws (esej) | 0 | 0 | +0.0 | 5.2 | 4.2 | -1.0 |
+| xix (esej) | 0 | 0 | +0.0 | 5.2 | 4.2 | -1.0 |
 | **razem** | 34.9 | 33.9 | -1.0 | 11.7 | 9.5 | -2.2 |
 
 Wg: rodzaj błędu
@@ -347,54 +348,54 @@ Wg: rodzaj błędu
 | esej B: spójność/długość | 0 | 0 | +0.0 | 0.3 | 0 | -0.3 |
 | **razem** | 56.7 | 51.5 | -5.2 | 31.3 | 28.5 | -2.8 |
 
-### T3-final (przed: T3-MIX)
+### T3-final (przed: T3-V124K)
 
 Wg: typ zadania
 
 | kategoria | przed 24+25 | finał 24+25 | Δ | przed 2026 | finał 2026 | Δ |
 |---|---|---|---|---|---|---|
-| closed_choice | 2.5 | 2.3 | -0.2 | 0.5 | 0.3 | -0.2 |
-| closed_tf | 1.0 | 3.0 | +2.0 | 1.0 | 1.3 | +0.3 |
-| closed_match | 5.5 | 4.0 | -1.5 | 2.0 | 2.0 | +0.0 |
-| podaj | 12.5 | 14.0 | +1.5 | 4.0 | 4.7 | +0.7 |
-| rozstrz | 12.5 | 14.0 | +1.5 | 9.5 | 10.0 | +0.5 |
-| wyjasnij | 5.5 | 5.3 | -0.2 | 0.5 | 2.0 | +1.5 |
-| essay | 28.5 | 27.3 | -1.2 | 15.0 | 14.0 | -1.0 |
-| **razem** | 68.0 | 70.0 | +2.0 | 32.5 | 34.3 | +1.8 |
+| closed_choice | 2.3 | 1.5 | -0.8 | 0.3 | 0.5 | +0.2 |
+| closed_tf | 3.0 | 1.5 | -1.5 | 1.3 | 1.0 | -0.3 |
+| closed_match | 4.0 | 5.0 | +1.0 | 2.0 | 1.5 | -0.5 |
+| podaj | 14.0 | 14.0 | -0.0 | 4.7 | 4.0 | -0.7 |
+| rozstrz | 14.0 | 14.0 | +0.0 | 10.0 | 9.5 | -0.5 |
+| wyjasnij | 5.3 | 5.5 | +0.2 | 2.0 | 2.5 | +0.5 |
+| essay | 27.3 | 28.0 | +0.7 | 14.0 | 14.0 | +0.0 |
+| **razem** | 70.0 | 69.5 | -0.5 | 34.3 | 33.0 | -1.3 |
 
 Wg: epoka
 
 | kategoria | przed 24+25 | finał 24+25 | Δ | przed 2026 | finał 2026 | Δ |
 |---|---|---|---|---|---|---|
-| staro | 0 | 3.3 | +3.3 | 0.5 | 1.3 | +0.8 |
-| sred | 8.5 | 9.0 | +0.5 | 3.5 | 3.7 | +0.2 |
-| nowo | 11.0 | 10.7 | -0.3 | 3.0 | 2.3 | -0.7 |
-| xix | 5.5 | 5.7 | +0.2 | 4.0 | 4.7 | +0.7 |
-| 1914-39 | 7.5 | 9.7 | +2.2 | 4.0 | 4.0 | +0.0 |
-| iiws | 2.0 | 2.0 | +0.0 | 0 | 0.7 | +0.7 |
-| 1945-89 | 5.0 | 2.3 | -2.7 | 2.5 | 3.7 | +1.2 |
-| 1914-39 (esej) | 0 | 14.0 | +14.0 | 0 | 0 | +0.0 |
-| 1945-89 (esej) | 0 | 13.3 | +13.3 | 0 | 0 | +0.0 |
-| sred (esej) | 28.5 | 0 | -28.5 | 0 | 0 | +0.0 |
-| iiws (esej) | 0 | 0 | +0.0 | 15.0 | 14.0 | -1.0 |
-| **razem** | 68.0 | 70.0 | +2.0 | 32.5 | 34.3 | +1.8 |
+| staro | 3.3 | 3.0 | -0.3 | 1.3 | 1.0 | -0.3 |
+| sred | 9.0 | 8.5 | -0.5 | 3.7 | 3.5 | -0.2 |
+| nowo | 10.7 | 10.5 | -0.2 | 2.3 | 2.5 | +0.2 |
+| xix | 5.7 | 5.0 | -0.7 | 4.7 | 3.5 | -1.2 |
+| 1914-39 | 9.7 | 9.5 | -0.2 | 4.0 | 4.0 | -0.0 |
+| iiws | 2.0 | 2.0 | +0.0 | 0.7 | 0.5 | -0.2 |
+| 1945-89 | 2.3 | 3.0 | +0.7 | 3.7 | 4.0 | +0.3 |
+| 1914-39 (esej) | 14.0 | 14.0 | +0.0 | 0 | 0 | +0.0 |
+| 1945-89 (esej) | 13.3 | 0 | -13.3 | 0 | 0 | +0.0 |
+| xix (esej) | 0 | 14.0 | +14.0 | 0 | 0 | +0.0 |
+| iiws (esej) | 0 | 0 | +0.0 | 14.0 | 14.0 | +0.0 |
+| **razem** | 70.0 | 69.5 | -0.5 | 34.3 | 33.0 | -1.3 |
 
 Wg: rodzaj błędu
 
 | kategoria | przed 24+25 | finał 24+25 | Δ | przed 2026 | finał 2026 | Δ |
 |---|---|---|---|---|---|---|
-| wiedza/fakt | 17.0 | 21.3 | +4.3 | 7.5 | 7.7 | +0.2 |
-| źle odczytany obraz | 6.5 | 7.0 | +0.5 | 4.0 | 3.0 | -1.0 |
-| źle odczytany tekst źródła | 6.0 | 3.7 | -2.3 | 2.5 | 3.3 | +0.8 |
-| polecenie/format | 2.0 | 0.3 | -1.7 | 0 | 0 | +0.0 |
-| odpowiedź niepełna | 0 | 0.3 | +0.3 | 0 | 0.3 | +0.3 |
-| rozumowanie/logika | 4.0 | 6.0 | +2.0 | 2.0 | 3.3 | +1.3 |
-| harness (fallback/urwanie/błąd) | 3.0 | 3.0 | -0.0 | 1.5 | 2.7 | +1.2 |
+| wiedza/fakt | 21.3 | 19.0 | -2.3 | 7.7 | 7.5 | -0.2 |
+| źle odczytany obraz | 7.0 | 9.0 | +2.0 | 3.0 | 6.5 | +3.5 |
+| źle odczytany tekst źródła | 3.7 | 4.0 | +0.3 | 3.3 | 4.0 | +0.7 |
+| polecenie/format | 0.3 | 0 | -0.3 | 0 | 0 | +0.0 |
+| odpowiedź niepełna | 0.3 | 2.5 | +2.2 | 0.3 | 0 | -0.3 |
+| rozumowanie/logika | 6.0 | 5.0 | -1.0 | 3.3 | 1.0 | -2.3 |
+| harness (fallback/urwanie/błąd) | 3.0 | 1.0 | -2.0 | 2.7 | 0 | -2.7 |
 | sędzia/grader za surowy (tylko ewaluacja) | 1.0 | 1.0 | +0.0 | 0 | 0 | +0.0 |
-| esej A: aspekty (powierzchowne/brak) | 18.4 | 18.3 | -0.0 | 10.7 | 9.2 | -1.5 |
-| esej A: błędy merytoryczne | 5.8 | 5.1 | -0.7 | 1.4 | 2.5 | +1.1 |
-| esej B: spójność/długość | 4.3 | 3.9 | -0.5 | 2.9 | 2.2 | -0.7 |
-| **razem** | 68.0 | 70.0 | +2.0 | 32.5 | 34.3 | +1.8 |
+| esej A: aspekty (powierzchowne/brak) | 18.3 | 18.3 | -0.0 | 9.2 | 9.2 | -0.1 |
+| esej A: błędy merytoryczne | 5.1 | 5.8 | +0.7 | 2.5 | 2.9 | +0.4 |
+| esej B: spójność/długość | 3.9 | 3.9 | +0.0 | 2.2 | 1.9 | -0.3 |
+| **razem** | 70.0 | 69.5 | -0.5 | 34.3 | 33.0 | -1.3 |
 
 ## G. Warianty bliskie najlepszym vs odniesienie (Δ pkt = średnia wariantu − średnia odniesienia, te same zadania)
 
@@ -563,7 +564,7 @@ Wg: rodzaj błędu
 - wg img: False: +1.00, True: -0.50
 - największe zmiany: 2026/8 +1.00, 2024/25 +0.50, 2026/16.2 -1.00
 
-### T3-T40K vs T3-final@T3-T40K — odrzucone: słownik przycięty do 40k (1.40 GB), z retry
+### T3-T40K vs T3-V124K@T3-T40K — odrzucone: słownik przycięty do 40k (1.40 GB), z retry
 
 - Δ 2024+2025: **-5.50 pkt (-4.6 pp)**
   (w tym esej -1.00 pkt; bez eseju -4.50); 2024: +1.50; 2025: -7.00; 2026: +1.50
