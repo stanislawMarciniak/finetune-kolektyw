@@ -14,7 +14,7 @@ Test na sucho (27.09 08:42, H100, `exam_run.sh` jak w kroku 2.4 na `exams/test20
 
 ## 0. Repozytorium i TEAM_KEY (przed 11:00, najlepiej od razu)
 
-1. Commit i push repo (dane i wagi są w `.gitignore`; `SOURCE.md` ma wymagane zdanie „Made during the Warsaw Model Trainers hackathon…”): `git add -A && git commit -m "..." && git push`. Repo publiczne albo prywatne z dostępem do odczytu dla organizatorów i jury.
+1. Commit i push repo (dane i wagi są w `.gitignore`; `SOURCE.md` ma wymagane zdanie „Made during the Warsaw Model Trainers hackathon…”, opis i odtworzenie w `README.md`): `git add -A && git commit -m "..." && git push`. Repo publiczne albo prywatne z dostępem do odczytu dla organizatorów i jury.
 2. Link HTTPS do repo (bez tokenów i parametrów, np. `https://github.com/<org>/<repo>`) i TEAM_KEY mieć pod ręką.
 3. Po pushu już nic nie zmieniamy w żadnym projekcie (kod, prompty, konfiguracje).
 
@@ -90,7 +90,7 @@ Limit (wg drużyny): model bazowy < 8 GB, łącznie z dodatkowymi modelami/nakł
 | T2 (pomocniczy, raport 15) | `models/unsloth/Qwen3.5-0.8B-GGUF/Qwen3.5-0.8B-Q8_0.gguf` + `mmproj-F16.gguf` (opisy obrazów dla PLLuM; `caption_server` w `final_configs.json`, port = port T2 + 50) | 0.81 GB + 0.20 GB = 1.02 GB (811 843 840 + 204 987 232 B) → **T2 razem 8 722 139 328 B = 8.72 GB** (PLLuM 7 477 204 064 + LoRA 228 104 192 + Qwen 811 843 840 + mmproj 204 987 232) |
 | T3 | `Qwen3.5-4B-IQ2_M-PL-E4K-MIX-S4K-V124K.gguf` (największy plik; `~/models/custom/qwen35-4b/`, sha256 2f2a141a…) + `mmproj-F16.gguf` 0.67 GB | **1.53 GB** (1 532 889 600 B) |
 
-Jeśli T3 zmieni plik modelu: poprawić wiersz T3 w obu tabelach, `server/final_configs.json` i linię „T3 — plik modelu” w `SOURCE.md`.
+Jeśli T3 zmieni plik modelu: poprawić wiersz T3 w obu tabelach, `server/final_configs.json` i sekcję T3 (plik, bajty, sha256, polecenia) w `README.md`.
 
 ## Zmiany rano 27.09 (07:30–09:00)
 

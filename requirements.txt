@@ -1,0 +1,26 @@
+# Zależności Pythona (3.10–3.12; na maszynach egzaminacyjnych 3.12) zebrane z importów w harness/, eval/, data_gen/,
+# overnight/local/ i work/vt/. Wersje w komentarzach = te, na których działał egzamin (venv na H100 / laptopie).
+# OCR (--ocr) wymaga binarki systemowej: apt install tesseract-ocr tesseract-ocr-pol
+
+# harness/run_exam.py (egzamin) + walidacja
+openai>=1.70          # 3.19
+tantivy>=0.22         # 0.26; indeks BM25 PolQA i notatek (--rag bm25, --kb-rag)
+numpy>=1.26
+pillow>=10            # --image-tiles, OCR
+
+# eval/, data_gen/, overnight/local/ (ocena, generatory danych, pobieranie arkuszy CKE i PolQA)
+requests>=2.32
+pymupdf>=1.24         # ekstrakcja PDF CKE
+beautifulsoup4>=4.12  # crawl strony CKE
+huggingface_hub>=0.30
+hf_xet
+pyarrow>=15           # parquet Wikipedii (work/vt/count.py)
+tokenizers>=0.21      # częstości tokenów do przycinania słownika T3 (work/vt/)
+
+# Opcjonalnie (nieużywane w finałowych konfiguracjach): --kb-dense i harness/img_retrieval.py
+# torch
+# transformers
+
+# Trening LoRA (train/sft_lora.py; na Modal/H100): osobne środowisko z GPU, np.
+#   pip install unsloth unsloth_zoo "transformers>=4.57" "trl>=0.24" "peft>=0.17" datasets accelerate bitsandbytes
+# gguf-py (work/vt/trim.py, konwersja LoRA): pip install -e <llama.cpp>/gguf-py

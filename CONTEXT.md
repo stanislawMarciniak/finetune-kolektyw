@@ -49,7 +49,7 @@ Konfiguracje serwera i harnessu: **`server/final_configs.json`** (czyta je `serv
 - `eval/` — `grade.py` (zamknięte), `judge_openai.py` (sędzia LLM wg zasad CKE; odrzucenia filtra treści → `filtered`, poza mianownikiem), `analyze.py --registry eval/runs_registry_v2.json` (raport 09), `report.py`, `retrieval_bench.py`, `think_gate.py`, `build_exam.py`, `data/` (zbiory testowe, `scope_labels.json`).
 - `overnight/` — Modal (`modal_train.py`, `modal_convert.py`), skrypty lokalne (crawl CKE, ekstrakcja PDF).
 - `raports/` — 01 zasady, 02 ewaluacja, 03 benchmarki, 04 zasoby/koszty, 05 plan i decyzje, 06 datasety, 07 hipotezy, 08 analiza wyników (+ `08-wyniki-tabele.md`, `08b-wyszukiwanie.md`), 09 przed/po; 10–13 poprawki nocne, kwantyzacje T3, walidacja T1, strona organizatorów; 14–23 poranne eksperymenty (match-names, obrazy T1/T2, mały T3, reviewer faktów, głosowanie, audyt odpowiedzi `eval/audit.py`, illegal instruction i ponowienia T3, esej wg kryteriów CKE, wyszukiwanie obrazów).
-- `SOURCE.md` — opis rozwiązań i odtwarzania do zgłoszenia.
+- `README.md` — opis rozwiązań, danych, licencji i odtwarzania do zgłoszenia; `SOURCE.md` — plik wymagany przez regulamin (zdanie „Made during…”, odnośnik do README).
 
 Dane (w `.gitignore`, tylko lokalnie i na maszynach; wyjątki w repo: `data/kb/kompendium.jsonl`, `data/kb/kb_all_notes.jsonl` i konfiguracja adaptera LoRA T2): `assets/` (arkusze CKE, mock-2023, benchmark-2023), `exams/` (paczki testowe `test202x_v2`, `probe60_v2`), `data/sft/` (`e5_items.jsonl` 10 243 zadania; `v2`, `v2full`, `v2plain`), `data/kb/` (kompendium, oś czasu 2817, postacie 940, pojęcia 627, `kb_all_notes.jsonl`, indeks `polqa_index` 4.4 GB), `data/final_artifacts/` (kopia LoRA T2: GGUF + adapter PEFT), `runs/`, `results/`.
 

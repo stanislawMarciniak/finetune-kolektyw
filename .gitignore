@@ -23,7 +23,7 @@ __pycache__/
 .ipynb_checkpoints/
 .pytest_cache/
 
-# --- wagi modeli (pobierane z HF / trzymane na maszynach, patrz SOURCE.md) ---
+# --- wagi modeli (pobierane z HF / trzymane na maszynach, patrz README.md) ---
 *.gguf
 *.safetensors
 *.bin
